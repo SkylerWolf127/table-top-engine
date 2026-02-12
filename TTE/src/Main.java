@@ -9,6 +9,8 @@ public class Main {
 
         //Main Menu Window
         JFrame frame = new JFrame("Table-Top-Engine | Alpha 0 | Main Menu");
+        JButton helloButton = new JButton("Hello");
+        helloButton.setSize(50, 50);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //frame.getContentPane().add(button, BorderLayout.CENTER);
         //RENDER FRAME
@@ -23,6 +25,7 @@ public class Main {
         frame.setSize(800, 600);
         frame.pack();
         frame.setBackground(Color.PINK);
+        frame.setVisible(true);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create sheet window
