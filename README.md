@@ -2,7 +2,7 @@
 ## A graphical application built on top of Java to manage character sheets! 
 
 Brought to you by: THE C-Team
-*Bringing you "Functional" since 2024* 
+*Bringing you "Functional" software since 2024* 
 
 
 
