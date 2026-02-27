@@ -2,10 +2,15 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
-
-public class Main {
-    public static void main(String[] args) {
+/*
+I pulled save / load (PlayerSheetIO) class from a previous project.
+Works pretty well, will tune if it becomes problematic
+-Skyler
+ */
+public class Main{
+    public static void main(String[] args) throws IOException {
 
         //Main Menu Window
         JFrame frame = new JFrame("Table-Top-Engine | Alpha 0 | Main Menu");
@@ -29,8 +34,8 @@ public class Main {
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create sheet window
-
-
-
     }
+
+
+
 }

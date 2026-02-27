@@ -1,6 +1,11 @@
+import java.io.Serializable;
 
 //would it be a good idea to have the setup UI function condensed inside the player object? or do it in the main class?
-public class Sheet {
+//Serializable interface allows for save / load. Write sheet object into a stream of bytes to local storage.
+//Save / load routine should have the ability to access different parts of the File system. Not just PWD.
+
+public class Sheet implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     //test flag
     boolean isSetup;
@@ -51,7 +56,7 @@ public class Sheet {
     int deathSaves;
     int lifeSaves;
 
-    //skills
+    //skills | The walla of booleans lmfao
     boolean acrobatics;
     boolean animalHandling;
     boolean arcana;
@@ -137,13 +142,9 @@ public class Sheet {
 
     }//end constructor
 
-
-
-
-
-
     @Override
     public String toString() {
-        return super.toString();
+
+        return this.characterName + " " + this.characterClass + " " + this.characterRace + " " + this.characterBackground;
     }
 }
