@@ -1,0 +1,75 @@
+\documentclass{article}
+
+% Preamble
+\title{Table Top Engine (TTE) User's guide}
+\author{The C-Team}
+
+\begin{document}
+
+% Generate the title
+\maketitle
+
+% The rest of your document content goes here
+\newpage
+\section{Introduction}
+Welcome to the Table Top Engine! Brought to you by, "THE C-TEAM" \break
+This document will get you started with the Table Top Engine. From simply downloading the program to compiling it yourself! 
+\newpage
+\section{Getting started}
+The Table Top Engine is only hosted on our Github repository. Any other source may be a modification of our program or an unofficial distribution. Milestone builds / stable releases can be accessed from the RELEASES portion of the Github repository. Our Github repository can be accessed at the following link: https://github.com/SkylerWolf127/table-top-engine \break
+\subsection{Supported platforms and operating systems}
+Theoretically, Table Top Engine can run on any platform that supports Java 22 and Java Swing. We can't test for every possible combination, so here are a list of officially supported operating systems that we've tested for. 
+\begin{itemize}
+    \item Windows 8.1
+    \item Windows 10
+    \item Windows 11
+    \item macOS 10.15+
+    \item Fedora Linux 43
+    \item Ubuntu 24.04 LTS
+\end{itemize}
+Please see section "macOS and Linux support" for more details about macOS and Linux support.
+    
+
+
+\subsection{Setting up OpenJDK}
+Table Top Engine is written in Java and thus requires Java to be installed to your system. Don't worry! Most computers already have it installed. If you don't have Java installed, we recommend installing OpenJDK 22. This is the version that we have used to create this program. OpenJDK 22 can be accessed via the following link: https://openjdk.org/projects/jdk/22/
+\subsection{Downloading the Program}
+\begin{itemize}
+    \item Download the most recent release from the RELEASES portion of the Github.
+    \item Table Top Engine does not need to be installed. It's just one .JAR file. We recommend placing the .JAR file into its own directory on your Desktop or somewhere safe on your hard disk. 
+\end{itemize}
+\subsection{Running the program}
+Simply double click on the .JAR file to run Table Top Engine \break
+Please refer to the section 2.1 to see if your system is supported. 
+\newpage
+\section{macOS and Linux Support}
+macOS and Linux have proven to be a little "special" when it comes to out of the box support. This section will hopefully provide some useful information to get Table Top Engine running on your system. Full disclosure, Table Top Engine was written on Fedora 43 Linux work stations so it's tested to work on there. 
+\subsection{macOS}
+In general, Table Top Engine will work out of the box with macOS. macOS has some security features built in that can prevent "un-authorized" applications from running. If Table Top Engine gets blocked by macOS, here's how you can allow the program to run. We don't have malware! We're just unverified developers in Apple's eyes. 
+\begin{itemize}
+    \item Launch System Preferences (System Settings in later versions) 
+    \item Go to Security and Privacy
+    \item Scroll to find "Launch anyway" 
+    \item Confirm the override
+    \item Table Top Engine should launch now
+\end{itemize}
+If you're having issues getting Table Top Engine to launch, please open an issue in our Github! 
+\subsection{Linux}
+Linux support is a little tricky as most configurations are non-standard. This section should hopefully provide some useful information to get Table Top Engine running on your system. 
+\begin{itemize}
+    \item You must use a distribution that supports X11 / Wayland through a desktop environment.
+    \item Most standard desktop environments should work. We personally tested with KDE, Cinnamon, and GNOME.
+    \item OpenJDK does not usually come standard. You will need to download OpenJDK 22+ from your distributions package manager. We cannot provide that information here as each distribution is different. We recommend to check with your distribution's documentation for the right package names. 
+\end{itemize}
+\newpage
+\section{Messing With the Source Code}
+This section is for those who wish to mess with the source code. This is not meant for regular users!
+\break 
+Table Top Engine is fully open source and we encourage curious individuals to download and mess with the code. 
+\subsection{Downloading the source code}
+The source code can be accessed from the "Main" branch on the Github repository.
+\subsection{Setting up your development environment}
+We have standardized on OpenJDK 22 with development done on IntelliJ IDEA Community Edition. The "TTE" Folder in the Github Repository is an IntelliJ Project. Simply point your IDE to that project and open it. 
+
+
+\end{document}
