@@ -23,7 +23,7 @@ public class Main {
     // Opens the sheet creation window
     public static void openSheetCreator() {
         JFrame sheetFrame = new JFrame("Create Character Sheet");
-        sheetFrame.setSize(500, 600);
+        sheetFrame.setSize(640, 480);
         sheetFrame.setLayout(new GridLayout(0, 2));
 
         Sheet sheet = new Sheet();
