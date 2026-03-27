@@ -28,7 +28,7 @@ public class Main {
 
         Sheet sheet = new Sheet();
 
-        // ===== BASIC INFO =====
+        //preamble
         JTextField nameField = new JTextField();
         JTextField classField = new JTextField();
         JTextField raceField = new JTextField();
@@ -50,7 +50,7 @@ public class Main {
         sheetFrame.add(new JLabel("EXP:"));
         sheetFrame.add(expField);
 
-        // ===== ABILITY SCORES =====
+        //core scores
         JTextField strField = new JTextField();
         JLabel strMod = new JLabel("Mod: 0");
 
@@ -82,7 +82,7 @@ public class Main {
             });
         };
 
-        // ===== ADD FIELDS TO UI =====
+        //gen fields onto the UI
         sheetFrame.add(new JLabel("Strength:"));
         sheetFrame.add(strField);
         sheetFrame.add(strMod);
@@ -107,7 +107,6 @@ public class Main {
         sheetFrame.add(chaField);
         sheetFrame.add(chaMod);
 
-        // ===== HOOK LOGIC =====
         attachListener.accept(strField, () -> {
             sheet.setStrength(Integer.parseInt(strField.getText()));
             strMod.setText("Mod: " + sheet.getStrenghMod());
@@ -138,7 +137,7 @@ public class Main {
             chaMod.setText("Mod: " + sheet.getCharismaMod());
         });
 
-        // ===== SAVE BUTTON =====
+        //save dat shit
         JButton saveButton = new JButton("Save Sheet");
 
         saveButton.addActionListener(e -> {
