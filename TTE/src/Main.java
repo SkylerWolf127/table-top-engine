@@ -10,7 +10,8 @@ Works pretty well, will tune if it becomes problematic
 -Skyler
  */
 public class Main{
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException
+    {
 
         //Main Menu Window
         JFrame frame = new JFrame("Table-Top-Engine | Alpha 0 | Main Menu");
@@ -35,7 +36,4 @@ public class Main{
 
         //Create sheet window
     }
-
-
-
 }

@@ -8,7 +8,7 @@ public class Sheet implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //test flag
-    boolean isSetup;
+    boolean isSetup; //flag for checking if the sheet is fully setup. Potentially use for unsaved progress?
     //top of sheet
     private String characterName;
     private String characterClass;
@@ -53,10 +53,11 @@ public class Sheet implements Serializable {
     private int tempHP;
     private String hitDiceType;
     private int hitDiceTotal;
+    //death saves (Use these for success / fail on death saves. death = failure, life = success)
     int deathSaves;
     int lifeSaves;
 
-    //skills | The walla of booleans lmfao
+    //skills | The wall of booleans lmfao (Used for proficiency. false = not prof. true = prof.)
     boolean acrobatics;
     boolean animalHandling;
     boolean arcana;
