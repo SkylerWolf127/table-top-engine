@@ -5,9 +5,7 @@ import java.awt.event.ActionListener;
 
 public class Main {
     public static void main(String[] args) {
-
-
-        JFrame frame = new JFrame("Table-Top-Engine | Main Menu | Alpha 0 | GUI Test");
+        JFrame frame = new JFrame("Table-Top-Engine | Main Menu | Alpha 0.1 | GUI Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(640, 480);
         frame.setLayout(new FlowLayout());
@@ -17,11 +15,13 @@ public class Main {
         JButton showSheetButton = new JButton("Show Sheet"); //button works
         JButton wumboButton = new JButton("Fun!"); //button does not work
         JButton exitButton = new JButton("Exit"); //button does not work
+        JButton creditsButton = new JButton("Credits");
 
         //listeners
         createSheetButton.addActionListener(e -> openSheetCreator());
         wumboButton.addActionListener(e -> {JOptionPane.showMessageDialog(frame, "You've been surprised by the Fun! dialog box!!!");});
         exitButton.addActionListener(e -> {System.exit(0);});
+        creditsButton.addActionListener(e -> {openCreditWindow();});
 
         //add buttons
         frame.add(createSheetButton);
@@ -29,6 +29,8 @@ public class Main {
         frame.add(showSheetButton);
         frame.add(wumboButton);
         frame.add(exitButton);
+        frame.add(creditsButton);
+        //items added below this line will not be rendered.
         frame.setVisible(true);
 
         //create empty sheet object
@@ -82,6 +84,27 @@ public class Main {
     }
 
      */
+    public static void openCreditWindow(){ //TODO: Fix the formatting on this
+        JFrame creditsWindow = new JFrame("Credits");
+        creditsWindow.setSize(640,480);
+        creditsWindow.setLayout(new FlowLayout());
+        JTextArea creditsLabel = new JTextArea("Table Top Engine \n" +
+                "Brought to you by: The C-TEAM \n" +
+                "Program manager - Maeve \n" +
+                "Lead architect - Skyler \n" +
+                "Documentation and provider of cat pictures - Tara \n\n" +
+                "Built on top of Java using OpenJDK and IntelliJ Community Edition. Code available under GPL V2.0 license \n" +
+                "Copyright 2026 The C-TEAM \n\n\n\n Thank you for using our program!");
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                creditsWindow.dispose();
+            }});
+        creditsWindow.add(creditsLabel);
+        creditsWindow.add(okButton);
+        creditsWindow.setVisible(true);
+    }
 
     // Opens the sheet creation window
     public static void openSheetCreator() { //TODO: Implement checks to make sure all data fields are filled out before saving.
