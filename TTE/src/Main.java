@@ -6,24 +6,76 @@ import java.awt.event.ActionListener;
 public class Main {
     public static void main(String[] args) {
 
+
         JFrame frame = new JFrame("Table-Top-Engine | Main Menu | Alpha 0 | GUI Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(640, 480);
         frame.setLayout(new FlowLayout());
 
         JButton createSheetButton = new JButton("Create New Sheet");
+        JButton loadSheetButton = new JButton("Load Sheet");
+        JButton showSheetButton = new JButton("Show Sheet");
 
         // Button action → opens new window
         createSheetButton.addActionListener(e -> openSheetCreator());
 
         frame.add(createSheetButton);
+        frame.add(loadSheetButton);
+        frame.add(showSheetButton);
         frame.setVisible(true);
+
+        //create empty sheet object
+        Sheet loadSheet = new Sheet();
+
+        //show sheet
+        showSheetButton.addActionListener(e -> {
+           if(loadSheet.getCharacterName() == ""){
+               openErrorWindow("No valid character sheet has been loaded.");
+           }
+           else{
+
+           }
+
+        });
+
+        //TODO: Implement this.
+        //load character
+        loadSheetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("hello there!");
+            }
+        });
+    }
+
+
+    // generic error window
+    public static void openErrorWindow(String errorText){
+        JFrame errorFrame = new JFrame("Error | "+ errorText);
+        errorFrame.setSize(640, 480);
+        errorFrame.setLayout(new FlowLayout());
+        JPanel errorPanel = new JPanel();
+        errorPanel.setLayout(new GridLayout(1, 0));
+        JLabel errorLabel = new JLabel(errorText);
+        JButton acknowledgeButton = new JButton("Acknowledged");
+        errorPanel.add(acknowledgeButton);
+        errorFrame.add(errorLabel);
+        errorFrame.add(acknowledgeButton);
+        errorFrame.setVisible(true);
+
+        acknowledgeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                errorFrame.dispose();
+            }
+        });
+
     }
 
     // Opens the sheet creation window
     public static void openSheetCreator() {
         JFrame sheetFrame = new JFrame("Create Character Sheet");
-        sheetFrame.setSize(640, 480);
+        sheetFrame.setSize(640, 1000);
         sheetFrame.setLayout(new GridLayout(0, 2));
 
         Sheet sheet = new Sheet();
