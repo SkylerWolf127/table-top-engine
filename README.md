@@ -8,7 +8,7 @@ Brought to you by: THE C-Team
 
 # Setting up your development environment
 We have standardized our tool set to use the basic (community version) of JetBrains IntelliJ IDEA. 
-Make sure you have OpenJDK 22 (Amazon Corretto) Installed for your system. We switch architecture between Apple M-Series (AARCH64) and general x86_64 though theoretically architecture is independent of this program.
+Make sure you have OpenJDK 22 or newer installed for your system. 
 
 # Running the program
 Download the compiled .jar binary from this github repository. If you would like to build it yourself, make sure you have the above requirements met. 
@@ -21,7 +21,7 @@ The graphics system does not use any fancy technologies or packages. We are usin
 Swing has been around for YEARS. Yes, it's not nearly as fancy as FX but this ensures the the most compatibility as well as being easier to work with for our architecture.
 
 # Supported Operating Systems
-Anything that supports Java 22 and Java Swing *should* theoretically work. But things can explode sometimes. Here's what we tested for.
+Anything that supports Java 22 and supports a GUI *should* theoretically work. But things can special sometimes. Here's what we tested for.
 *  Windows 10 (22H2)
 *  Windows 11 (25H2) [unfortunately...]
 *  Fedora Linux 43 KDE Plasma (X11 and Wayland)
