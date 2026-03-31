@@ -30,7 +30,7 @@ Assume all buttons have their respective handlers. Overrides will be stated as n
 
 **Implementations:** None
 
-**Arguments:** `String errorText`
+**Arguments:** `String errorText` - String for error type. eg: sheet not loaded.
 
 ## Local variables
 

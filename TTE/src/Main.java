@@ -12,25 +12,33 @@ public class Main {
         frame.setSize(640, 480);
         frame.setLayout(new FlowLayout());
 
-        JButton createSheetButton = new JButton("Create New Sheet");
-        JButton loadSheetButton = new JButton("Load Sheet");
-        JButton showSheetButton = new JButton("Show Sheet");
+        JButton createSheetButton = new JButton("Create New Sheet"); //button works
+        JButton loadSheetButton = new JButton("Load Sheet"); //button does not work
+        JButton showSheetButton = new JButton("Show Sheet"); //button works
+        JButton wumboButton = new JButton("Fun!"); //button does not work
+        JButton exitButton = new JButton("Exit"); //button does not work
 
-        // Button action → opens new window
+        //listeners
         createSheetButton.addActionListener(e -> openSheetCreator());
+        wumboButton.addActionListener(e -> {JOptionPane.showMessageDialog(frame, "You've been surprised by the Fun! dialog box!!!");});
+        exitButton.addActionListener(e -> {System.exit(0);});
 
+        //add buttons
         frame.add(createSheetButton);
         frame.add(loadSheetButton);
         frame.add(showSheetButton);
+        frame.add(wumboButton);
+        frame.add(exitButton);
         frame.setVisible(true);
 
         //create empty sheet object
         Sheet loadSheet = new Sheet();
 
         //show sheet
-        showSheetButton.addActionListener(e -> {
+        showSheetButton.addActionListener(e -> { //determine if character sheet hasn't been setup. Checks if the name variable is empty.
            if(loadSheet.getCharacterName() == ""){
-               openErrorWindow("No valid character sheet has been loaded.");
+               JOptionPane.showMessageDialog(frame, "No valid sheet has been loaded. \n" +
+                       "Please load a sheet and try again.");
            }
            else{
 
@@ -49,7 +57,8 @@ public class Main {
     }
 
 
-    // generic error window
+    // generic error window  #### DEPRECATED CAUSE I'M A MORON. use JOptionPane.showMessageDialog(parentFrame, "Error Text");
+    /*
     public static void openErrorWindow(String errorText){
         JFrame errorFrame = new JFrame("Error | "+ errorText);
         errorFrame.setSize(640, 480);
@@ -72,8 +81,10 @@ public class Main {
 
     }
 
+     */
+
     // Opens the sheet creation window
-    public static void openSheetCreator() {
+    public static void openSheetCreator() { //TODO: Implement checks to make sure all data fields are filled out before saving.
         JFrame sheetFrame = new JFrame("Create Character Sheet");
         sheetFrame.setSize(640, 1000);
         sheetFrame.setLayout(new GridLayout(0, 2));
