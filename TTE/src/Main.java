@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 public class Main {
     public static void main(String[] args) {
+
         JFrame frame = new JFrame("Table-Top-Engine | Main Menu | Alpha 0.1 | GUI Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(640, 480);
