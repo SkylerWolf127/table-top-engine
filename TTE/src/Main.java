@@ -11,12 +11,13 @@ public class Main {
         frame.setSize(640, 480);
         frame.setLayout(new FlowLayout());
 
+        //buttons object creation
         JButton createSheetButton = new JButton("Create New Sheet"); //button works
         JButton loadSheetButton = new JButton("Load Sheet"); //button does not work
         JButton showSheetButton = new JButton("Show Sheet"); //button works
-        JButton wumboButton = new JButton("Fun!"); //button does not work
-        JButton exitButton = new JButton("Exit"); //button does not work
-        JButton creditsButton = new JButton("Credits");
+        JButton wumboButton = new JButton("Fun!"); //button works
+        JButton exitButton = new JButton("Exit"); //button work
+        JButton creditsButton = new JButton("Credits"); //button works
 
         //listeners
         createSheetButton.addActionListener(e -> openSheetCreator());
@@ -24,13 +25,14 @@ public class Main {
         exitButton.addActionListener(e -> {System.exit(0);});
         creditsButton.addActionListener(e -> {openCreditWindow();});
 
-        //add buttons
+        //add buttons to frame
         frame.add(createSheetButton);
         frame.add(loadSheetButton);
         frame.add(showSheetButton);
         frame.add(wumboButton);
         frame.add(exitButton);
         frame.add(creditsButton);
+
         //items added below this line will not be rendered.
         frame.setVisible(true);
 
@@ -61,6 +63,7 @@ public class Main {
 
 
     // generic error window  #### DEPRECATED CAUSE I'M A MORON. use JOptionPane.showMessageDialog(parentFrame, "Error Text");
+    //other options are available here: https://docs.oracle.com/javase/8/docs/api/javax/swing/JOptionPane.html
     /*
     public static void openErrorWindow(String errorText){
         JFrame errorFrame = new JFrame("Error | "+ errorText);
@@ -81,13 +84,12 @@ public class Main {
                 errorFrame.dispose();
             }
         });
-
     }
 
      */
     public static void openCreditWindow(){ //TODO: Fix the formatting on this
         JFrame creditsWindow = new JFrame("Credits");
-        creditsWindow.setSize(640,480);
+        creditsWindow.setSize(700,480);
         creditsWindow.setLayout(new FlowLayout());
         JTextArea creditsLabel = new JTextArea("Table Top Engine \n" +
                 "Brought to you by: The C-TEAM \n" +
@@ -139,22 +141,22 @@ public class Main {
 
         //core scores
         JTextField strField = new JTextField();
-        JLabel strMod = new JLabel("Mod: 0");
+        JLabel strMod = new JLabel("Mod: "+ sheet.getStrenghMod());
 
         JTextField dexField = new JTextField();
-        JLabel dexMod = new JLabel("Mod: 0");
+        JLabel dexMod = new JLabel("Mod: " + sheet.getDexterityMod());
 
         JTextField conField = new JTextField();
-        JLabel conMod = new JLabel("Mod: 0");
+        JLabel conMod = new JLabel("Mod: " + sheet.getConstitutionMod());
 
         JTextField intField = new JTextField();
-        JLabel intMod = new JLabel("Mod: 0");
+        JLabel intMod = new JLabel("Mod: " + sheet.getIntelligenceMod());
 
         JTextField wisField = new JTextField();
-        JLabel wisMod = new JLabel("Mod: 0");
+        JLabel wisMod = new JLabel("Mod: " +  sheet.getWisdomMod());
 
         JTextField chaField = new JTextField();
-        JLabel chaMod = new JLabel("Mod: 0");
+        JLabel chaMod = new JLabel("Mod: " + sheet.getCharismaMod());
 
         // Helper to enforce integer-only input + update modifier
         java.util.function.BiConsumer<JTextField, Runnable> attachListener = (field, updateAction) -> {
