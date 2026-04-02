@@ -11,7 +11,7 @@ We have standardized our tool set to use the basic (community version) of JetBra
 Make sure you have OpenJDK 22 or newer installed for your system. 
 
 # Running the program
-Download the compiled .jar binary from this github repository. If you would like to build it yourself, make sure you have the above requirements met. 
+Download the compiled .jar binary from this github repository. If you would like to build it yourself, make sure you have the above requirements met. Table Top Engine expects JRE 21 to be present, but theoretically it could work on any version as old as 8. 
 
 
 
