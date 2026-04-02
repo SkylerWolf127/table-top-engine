@@ -2,18 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Main {
     public static void main(String[] args) {
 
-        JFrame frame = new JFrame("Table-Top-Engine | Main Menu | Alpha 0.1 | GUI Test");
+        JFrame frame = new JFrame("Table-Top-Engine | Main Menu | Alpha 0.2 | Load Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(640, 480);
         frame.setLayout(new FlowLayout());
 
         //buttons object creation
         JButton createSheetButton = new JButton("Create New Sheet"); //button works
-        JButton loadSheetButton = new JButton("Load Sheet"); //button does not work
+        JButton loadSheetButton = new JButton("Load Sheet"); //button works
         JButton showSheetButton = new JButton("Show Sheet"); //button works
         JButton wumboButton = new JButton("Fun!"); //button works
         JButton exitButton = new JButton("Exit"); //button work
@@ -21,9 +22,21 @@ public class Main {
 
         //listeners
         createSheetButton.addActionListener(e -> openSheetCreator());
-        wumboButton.addActionListener(e -> {JOptionPane.showMessageDialog(frame, "You've been surprised by the Fun! dialog box!!!");});
-        exitButton.addActionListener(e -> {System.exit(0);});
-        creditsButton.addActionListener(e -> {openCreditWindow();});
+        wumboButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(frame, "You've been surprised by the Fun! dialog box!!!");
+        });
+        exitButton.addActionListener(e -> {
+            System.exit(0);
+        });
+        creditsButton.addActionListener(e -> {
+            openCreditWindow();
+        });
+        /*loadSheetButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(frame, "This function has not been implemented yet.");
+        });
+
+         */
+
 
         //add buttons to frame
         frame.add(createSheetButton);
@@ -37,28 +50,14 @@ public class Main {
         frame.setVisible(true);
 
         //create empty sheet object
-        Sheet loadSheet = new Sheet();
+        AtomicReference<Sheet> loadedSheet = new AtomicReference<>(new Sheet());
+        //String sheetToLoad = null;
 
-        //show sheet
-        showSheetButton.addActionListener(e -> { //determine if character sheet hasn't been setup. Checks if the name variable is empty.
-           if(loadSheet.getCharacterName() == ""){
-               JOptionPane.showMessageDialog(frame, "No valid sheet has been loaded. \n" +
-                       "Please load a sheet and try again.");
-           }
-           else{
+        //LOADING ROUTINE
+        loadSheetButton.addActionListener(e -> {
+            loadedSheet.set(openLoadWindow());});
 
-           }
-
-        });
-
-        //TODO: Implement this.
-        //load character
-        loadSheetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("hello there!");
-            }
-        });
+        System.out.println(loadedSheet.get());
     }
 
 
@@ -87,6 +86,37 @@ public class Main {
     }
 
      */
+
+    public static Sheet openLoadWindow(){
+
+        Sheet loadedSheet = new Sheet();
+
+        JFrame loadWindow = new JFrame("Load Character Sheet");
+        loadWindow.setSize(640, 480);
+        loadWindow.setLayout(new FlowLayout());
+        String loadSheetName = JOptionPane.showInputDialog(loadWindow, "Please enter the name of the character you'd like to load. Names are case sensitive. Please include .dat at the end of name");
+        if (loadSheetName != null){
+            System.out.println("Loading sheet of name " + loadSheetName);
+            loadedSheet = PlayerSheetIO.loadPlayerSheetFromFile(loadSheetName);
+            if(loadedSheet == null){
+                System.out.println("Failed to load sheet of name " + loadSheetName);
+                JOptionPane.showMessageDialog(loadWindow, "Failed to load sheet of name " + loadSheetName);
+            }
+            else{
+                System.out.println("PlayerSheetIO Found sheet " + loadSheetName + " and was able to load it into memory.");
+                System.out.println(loadedSheet);
+                JOptionPane.showMessageDialog(loadWindow, "Found sheet of name " + loadSheetName + " and was able to load it into memory.");
+                return loadedSheet;
+            }
+        }else{
+            JOptionPane.showMessageDialog(loadWindow, "Failed to load sheet of name " + loadSheetName);
+        }
+        loadWindow.dispose();
+        return loadedSheet;
+
+    }
+
+
     public static void openCreditWindow(){ //TODO: Fix the formatting on this
         JFrame creditsWindow = new JFrame("Credits");
         creditsWindow.setSize(700,480);
@@ -237,9 +267,11 @@ public class Main {
                 sheet.setPlayerName(playerField.getText());
                 sheet.setCharacterEXP(Integer.parseInt(expField.getText()));
 
-                PlayerSheetIO.savePlayerSheetToFile(sheet, "playerSheet.dat");
+                String sheetSaveName = sheet.getCharacterName()+".dat";
 
-                JOptionPane.showMessageDialog(sheetFrame, "Sheet Saved!");
+                PlayerSheetIO.savePlayerSheetToFile(sheet, sheetSaveName);
+
+                JOptionPane.showMessageDialog(sheetFrame, "Sheet Saved as " +  sheetSaveName + " in the local TTE directory.");
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(sheetFrame, "Error: " + ex.getMessage());
