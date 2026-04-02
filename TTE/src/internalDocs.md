@@ -23,21 +23,16 @@ Assume all buttons have their respective handlers. Overrides will be stated as n
 
 `loadSheet` - Volatile variable that holds a sheet object. Intended for use with `loadSheetButton`
 
-#   public static void openErrorWindow(String errorText)
-**Parent class:** None
 
-**Overrides:** `actionPerformed`
 
-**Implementations:** None
 
-**Arguments:** `String errorText` - String for error type. eg: sheet not loaded.
 
-## Local variables
+# Routines
+## Save routine
+Implements the PlayerSheetIO class. Use `savePlayerSheetToFile(Sheet sheet, String filename)`
+Pass in a valid `Sheet` object and a `filename` to call it. This will save to the project's local directory or wherever the .JAR file is being ran from.
 
-`errorFrame` - Frame for the error window. Title for it is dynamically generated based on the error text that is passed into it.
-
-`errorPanel` - A panel for buttons and elements to be composed onto. 
-
-`errorLabel` - A label text showing the error. Dynamically generated based on the error text that is passed into the method. 
-
-`acknowledgeButton` - A button that makes the window go away.
+## Load routine
+Implements the PlayerSheetIO class. Use `loadPlayerSheetFromFile(String filename)`
+pass in a valid `sheet` object file name. The function is not looking for any particular file name, but as long as you give it a full name + extension, it should find something.
+Example, use `playerSheet.dat`. If that file exists on the local directory, `loadPlayerSheetFromFile` will load it into memory.
