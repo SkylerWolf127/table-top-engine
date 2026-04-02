@@ -57,7 +57,7 @@ public class Main {
         loadSheetButton.addActionListener(e -> {
             loadedSheet.set(openLoadWindow());});
 
-        System.out.println(loadedSheet.get());
+        System.out.println(loadedSheet);
     }
 
 
