@@ -17,6 +17,7 @@ public class Sheet implements Serializable {
     private String characterAlignment;
     private String playerName;
     private int characterEXP;
+    private int characterLevel;
 
     //ability scores
     private int strength;
@@ -88,6 +89,7 @@ public class Sheet implements Serializable {
         characterAlignment = "";
         playerName = "";
         characterEXP = 0;
+        characterLevel = 1;
         strength = 0;
         dexterity = 0;
         constitution = 0;
@@ -175,6 +177,9 @@ public class Sheet implements Serializable {
 
     public int getCharacterEXP() { return characterEXP; }
     public void setCharacterEXP(int characterEXP) { this.characterEXP = characterEXP; }
+
+    public int getCharacterLevel() { return characterLevel; }
+    public void setCharacterLevel(int characterLevel) { this.characterLevel = characterLevel; }
 
     // ability scores
     public int getStrength() { return strength; }
