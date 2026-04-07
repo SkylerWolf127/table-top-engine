@@ -4,16 +4,12 @@
 Brought to you by: THE C-Team
 *Bringing you "Functional" software since 2024* 
 
-
+# Running the program
+Download the compiled .jar binary from this github repository. If you would like to build it yourself, make sure you have the above requirements met. Table Top Engine expects JRE 21 to be present, but theoretically it could work on any version as old as 8. 
 
 # Setting up your development environment
 We have standardized our tool set to use the basic (community version) of JetBrains IntelliJ IDEA. 
 Make sure you have OpenJDK 22 or newer installed for your system. 
-
-# Running the program
-Download the compiled .jar binary from this github repository. If you would like to build it yourself, make sure you have the above requirements met. Table Top Engine expects JRE 21 to be present, but theoretically it could work on any version as old as 8. 
-
-
 
 # Supporting the GUI
 The graphics system does not use any fancy technologies or packages. We are using Java Swing for windowing. 
