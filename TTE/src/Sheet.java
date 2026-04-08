@@ -12,6 +12,7 @@ public class Sheet implements Serializable {
     //top of sheet
     private String characterName;
     private String characterClass;
+    private String subClass;
     private String characterRace;
     private String characterBackground;
     private String characterAlignment;
@@ -84,6 +85,7 @@ public class Sheet implements Serializable {
     public Sheet(){
         characterName = "";
         characterClass = "";
+        subClass = "";
         characterRace = "";
         characterBackground = "";
         characterAlignment = "";
@@ -162,6 +164,9 @@ public class Sheet implements Serializable {
 
     public String getCharacterClass() { return characterClass; }
     public void setCharacterClass(String characterClass) { this.characterClass = characterClass; }
+
+    public String getSubClass() { return subClass; }
+    public void setSubClass(String subClass) { this.subClass = subClass; }
 
     public String getCharacterRace() { return characterRace; }
     public void setCharacterRace(String characterRace) { this.characterRace = characterRace; }
