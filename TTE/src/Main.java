@@ -16,6 +16,15 @@ public class Main {
 
     //main entry point to the program
     public static void main(String[] args) {
+        //Tabbed UI REWORK
+        JFrame TabUI = new JFrame("Table-Top-Engine | Tabbed UI | TEST");
+        TabUI.setSize(800, 600);
+        TabUI.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        TabUI.setLayout(new FlowLayout());
+        TabUI.setVisible(true);
+
+
+
         JFrame frame = new JFrame("Table-Top-Engine | Main Menu | Alpha 1.0");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(640, 480);
