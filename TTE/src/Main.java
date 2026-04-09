@@ -21,6 +21,13 @@ public class Main {
         TabUI.setSize(800, 600);
         TabUI.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         TabUI.setLayout(new FlowLayout());
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setBackground(BG);
+        tabbedPane.setForeground(SECTION_BG);
+        tabbedPane.setFont(new Font("Arial", Font.PLAIN, 12));
+        TabUI.add(tabbedPane);
+        
+        //values below this line will not be added to the tabbed UI
         TabUI.setVisible(true);
 
 
