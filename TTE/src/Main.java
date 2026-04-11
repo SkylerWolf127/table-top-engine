@@ -65,6 +65,18 @@ public class Main {
 
     //load window
     public static Sheet openLoadWindow(JFrame parent) {
+        Sheet returnSheet = new Sheet();
+
+        returnSheet = PlayerSheetIO.loadSheetFromDirectory();
+
+        if (returnSheet != null && returnSheet.getCharacterName() != "") {
+            JOptionPane.showMessageDialog(parent, "Loaded sheet " + returnSheet.getCharacterName());
+        }else {
+            JOptionPane.showMessageDialog(parent, "Failed to load sheet.");
+        }
+        return returnSheet;
+
+          /* ### THIS IS OLD LEGACY LOADING CODE. ONLY USE FOR DEBUG PURPOSES. AS OF NOW, IT IS DEPRECATED.
         String name = JOptionPane.showInputDialog(parent,
             "Enter character file name (include .dat):");
         if (name == null || name.trim().isEmpty()) {
@@ -78,6 +90,9 @@ public class Main {
         }
         JOptionPane.showMessageDialog(parent, "Loaded: " + loaded.getCharacterName());
         return loaded;
+
+         */
+
     }
 
     //generate report for show sheet window
