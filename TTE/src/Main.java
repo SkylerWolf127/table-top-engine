@@ -15,22 +15,80 @@ public class Main {
     private static final Color FIELD_BG    = new Color(0x0A0A1A);
     private static final Color BORDER_COL  = new Color(0x2A2A4A);
 
+    // Keeps track of how many tabs have been created
+    private static int tabNumber = 0;
+
     //main entry point to the program
     public static void main(String[] args) {
-        //Tabbed UI REWORK
-        JFrame TabUI = new JFrame("Table-Top-Engine | Tabbed UI | TEST");
-        TabUI.setSize(800, 600);
-        TabUI.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        TabUI.setLayout(new FlowLayout());
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setBackground(BG);
-        tabbedPane.setForeground(SECTION_BG);
-        tabbedPane.setFont(new Font("Arial", Font.PLAIN, 12));
-        TabUI.add(tabbedPane);
-        
-        //values below this line will not be added to the tabbed UI
-        TabUI.setVisible(true);
+        // Tabbed UI rework
 
+        // Initialize JFrame
+        JFrame newFrame = new JFrame("TTE Character Sheet Builder");
+        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newFrame.setSize(800,600);
+
+        // Initialize TabbedPane
+        JTabbedPane tabPane = new JTabbedPane();
+
+        // Initialize MenuBar
+        JMenuBar menuBar = new JMenuBar();
+        JMenuItem newSheet = new JMenuItem("New Sheet");
+        JMenuItem loadSheet = new JMenuItem("Load Sheet");
+        JMenuItem saveSheet = new JMenuItem("Save Sheet");
+
+        // Add a new sheet to the tabs
+        newSheet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Creates a new tab in tabPane
+                tabPane.addTab("New Sheet #" + (++tabNumber), new JLabel("Content of New Sheet #" + (tabNumber)));
+                tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
+
+                // Adds a close button to tab(s)
+                tabPane.setTabComponentAt(0, new CloseButton(tabPane, 0)); // Needed for adding to first tab
+                tabPane.addChangeListener(e1 -> {
+                    for(int i = 0; i < tabPane.getTabCount(); i++) {
+                        tabPane.setTabComponentAt(i, new CloseButton(tabPane, i));
+                    }
+                }); // Adds to all tabs
+            }
+        });
+
+        // Loads a new sheet to the tabs
+        loadSheet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Creates a new tab in tabPane
+                tabPane.addTab("Loaded Sheet #" + (++tabNumber), new JLabel("Content of Loaded Sheet #" + (tabNumber)));
+                tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
+
+                // Adds a close button to tab(s)
+                tabPane.setTabComponentAt(0, new CloseButton(tabPane, 0)); // Needed for adding to first tab
+                tabPane.addChangeListener(e1 -> {
+                    for(int i = 0; i < tabPane.getTabCount(); i++) {
+                        tabPane.setTabComponentAt(i, new CloseButton(tabPane, i));
+                    }
+                }); // Adds to all tabs
+            }
+        });
+
+        // Saves the current sheet
+        saveSheet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("At some point this button will save the current sheet");
+            }
+        });
+
+        // Add items to menu
+        menuBar.add(newSheet);
+        menuBar.add(loadSheet);
+        menuBar.add(saveSheet);
+
+        // Add to frame
+        newFrame.setJMenuBar(menuBar);
+        newFrame.add(tabPane);
+        newFrame.setVisible(true);
 
         //###LEGACY MENU START //
 
@@ -79,6 +137,25 @@ public class Main {
         frame.add(exitButton);
         frame.add(creditsButton);
         frame.setVisible(true);
+    }
+
+    // Close button class for tabs
+    static class CloseButton extends JPanel {
+        public CloseButton(final JTabbedPane tabPane, int index) {
+            // Initialize JLabel
+            setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+            setOpaque(false);
+            JLabel label = new JLabel(tabPane.getTitleAt(index));
+            add(label);
+
+            // Add the close button to the tab
+            JButton button = new JButton("X");
+            button.setPreferredSize(new Dimension(16, 16));
+            button.addActionListener(e -> {
+                tabPane.removeTabAt(index);
+            });
+            add(button);
+        }
     }
 
     //load window
