@@ -31,5 +31,4 @@ You will need to open System Settings, navigate to "Privacy & Security", and all
 If you're running the source code from IntelliJ, you won't see this problem. It will show the error though when you attempt to run a compiled binary. Whether you made it yourself or the one pulled from this repo. 
 
 ## A note on Linux support
-We (*the C-Team*) are Ardent Linux users. We hate Windows just as much as the next guy. But there's some things we can't account for in the development process. YOUR MILEAGE MAY VARY ON DIFFERENT LINUX DISTRIBUTION. No we didn't test, Ubuntu, no we didn't test Arch, no we didn't test X-Distribution. If you can load a desktop on it and can install OpenJDK 22, you generally should be OK. 
-If a Linux distribution is incompatible for whatever reason and you find a fix, please contact us! 
+While Linux is a great platform and we've developed this program on it, we can't test every possbile distribution. If there's a distribution that has some sort of error, please make sure that you have the requisite JRE / JDK installed, a Desktop Environment, and the ability to load .jar applications. Sometimes you made need to invoke the .jar executable from the command line. 
