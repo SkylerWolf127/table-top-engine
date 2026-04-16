@@ -22,6 +22,7 @@ Anything that supports Java 22 and supports a GUI *should* theoretically work. B
 *  Windows 11 (25H2) [unfortunately...]
 *  Fedora Linux 43 KDE Plasma (X11 and Wayland)
 *  Linux Mint
+*  Ubuntu 24.10 LTS
 *  macOS 15.7.x
 
 ## A note on macOS support
