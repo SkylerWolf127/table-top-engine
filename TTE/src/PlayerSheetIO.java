@@ -48,6 +48,8 @@ public class PlayerSheetIO//save load routine (It probably works...)
     /*
 
        ### This loading Routine is for DEBUG USE ONLY. Only use if the traditional GUI loading has broken down ###
+       This load routine was not designed to work with the GUI but it can hook into it if you write the proper integrations for it.
+       We haven't done that. All internal testing with this code took place on command line or VERY primitive windows.
     public static Sheet loadPlayerSheetFromFile(String filename)
     {
 
