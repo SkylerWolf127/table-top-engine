@@ -7,6 +7,11 @@ public class PlayerSheetIO//save load routine (It probably works...)
 {
     public static void savePlayerSheetToFile(Sheet sheet, String filename)
     {
+        /*
+        Open object output stream, send sheet obj + file name to destination (TTE folder)
+        if file was unable to save, throw stderr back to main
+         */
+
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(sheet);
             System.out.println("Player sheet saved to " + filename);
@@ -15,7 +20,13 @@ public class PlayerSheetIO//save load routine (It probably works...)
         }
     }
 
-    public static Sheet loadSheetFromDirectory(){
+    public static Sheet loadSheetFromDirectory()
+    {
+        /*
+        Create a blank sheet object, create JFileChooser. Filter is set for TTE .dat files and those are the only ones that will be loaded.
+        User must select a valid .dat TTE file. If a valid one is not chosen the file will not load.
+        Successful files will be passed into the loadedSheet object and returned back to Main.
+         */
         Sheet loadedSheet = new Sheet();
 
         JFileChooser chooser = new JFileChooser();
@@ -34,6 +45,11 @@ public class PlayerSheetIO//save load routine (It probably works...)
         return loadedSheet;
     }
 
+    /*
+
+       ### This loading Routine is for DEBUG USE ONLY. Only use if the traditional GUI loading has broken down ###
+       This load routine was not designed to work with the GUI but it can hook into it if you write the proper integrations for it.
+       We haven't done that. All internal testing with this code took place on command line or VERY primitive windows.
     public static Sheet loadPlayerSheetFromFile(String filename)
     {
 
@@ -46,6 +62,8 @@ public class PlayerSheetIO//save load routine (It probably works...)
             return null;
         }
     }
+
+     */
 
 
 }

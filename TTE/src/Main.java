@@ -96,7 +96,7 @@ public class Main {
 
         //###LEGACY MENU START //
 
-        JFrame frame = new JFrame("Table-Top-Engine | Main Menu | Alpha 1.0");
+        JFrame frame = new JFrame("Table-Top-Engine | Legacy Debug Menu" );
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(640, 480);
         frame.setLayout(new FlowLayout());
