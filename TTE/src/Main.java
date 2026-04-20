@@ -21,12 +21,11 @@ public class Main {
     //main entry point to the program
     public static void main(String[] args) {
         // Tabbed UI rework
-
         // Initialize JFrame
         JFrame newFrame = new JFrame("TTE Character Sheet Builder");
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.setSize(800,600);
-
+        
         // Initialize TabbedPane
         JTabbedPane tabPane = new JTabbedPane();
 
@@ -44,13 +43,18 @@ public class Main {
                 tabPane.addTab("New Sheet #" + (++tabNumber), new JLabel("Content of New Sheet #" + (tabNumber)));
                 tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
 
-                // Adds a close button to tab(s)
-                tabPane.setTabComponentAt(0, new CloseButton(tabPane, 0)); // Needed for adding to first tab
-                tabPane.addChangeListener(e1 -> {
-                    for(int i = 0; i < tabPane.getTabCount(); i++) {
-                        tabPane.setTabComponentAt(i, new CloseButton(tabPane, i));
-                    }
-                }); // Adds to all tabs
+                // fun()
+                openSheetCreator(tabPane.getSelectedIndex(), tabPane);
+
+                // FIX FIX FIX
+
+//                // Adds a close button to tab(s)
+//                tabPane.setTabComponentAt(0, new CloseButton(tabPane, 0)); // Needed for adding to first tab
+//                tabPane.addChangeListener(e1 -> {
+//                    for(int i = 0; i < tabPane.getTabCount(); i++) {
+//                        tabPane.setTabComponentAt(i, new CloseButton(tabPane, i));
+//                    }
+//                }); // Adds to all tabs
             }
         });
 
@@ -108,7 +112,7 @@ public class Main {
         java.util.concurrent.atomic.AtomicReference<Sheet> loadedSheet =
             new java.util.concurrent.atomic.AtomicReference<>(null);
 
-        createSheetButton.addActionListener(e -> openSheetCreator());
+        //createSheetButton.addActionListener(e -> openSheetCreator());
         wumboButton.addActionListener(e ->
             JOptionPane.showMessageDialog(frame, "You've been surprised by the Fun! dialog box!!!"));
         exitButton.addActionListener(e -> System.exit(0));
@@ -189,8 +193,6 @@ public class Main {
          */
 
     }
-
-
 
     //generate report for show sheet window
     public static void openShowSheetWindow(Sheet sheet) {
@@ -292,13 +294,14 @@ public class Main {
     }
 
     //sheet creation
-    public static void openSheetCreator() {
+    public static void openSheetCreator(int index, JTabbedPane pane) {
 
         //main frame
-        JFrame f = new JFrame("Create Character Sheet");
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.setSize(780, 860);
-        f.setBackground(BG);
+        //JFrame f = new JFrame("Create Character Sheet");
+        //f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //f.setSize(780, 860);
+        //f.setBackground(BG);
+
         Sheet sheet = new Sheet();
         JPanel root = new JPanel();
         root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
@@ -477,15 +480,22 @@ public class Main {
                 sheet.setSurvival(skillBoxes[17].isSelected());
                 sheet.setSetup(true);
 
+                // SCREAMS OF AGONY
+
+                // FIX FIX FIX DO NOT LEAVE AS NULL
+
+                // SCREAMS OF AGONY
+
+
                 if (sheet.getCharacterName().isEmpty()) {
-                    JOptionPane.showMessageDialog(f, "Character name cannot be empty.");
+                    JOptionPane.showMessageDialog(null, "Character name cannot be empty.");
                     return;
                 }
                 String saveName = sheet.getCharacterName() + ".dat";
                 PlayerSheetIO.savePlayerSheetToFile(sheet, saveName);
-                JOptionPane.showMessageDialog(f, "Sheet saved as \"" + saveName + "\"");
+                JOptionPane.showMessageDialog(null, "Sheet saved as \"" + saveName + "\"");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(f, "Error saving sheet: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Error saving sheet: " + ex.getMessage());
             }
         });
 
@@ -498,9 +508,11 @@ public class Main {
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
 
-        f.add(scroll);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
+        pane.setComponentAt(index, root);
+
+        //f.add(scroll);
+        //f.setLocationRelativeTo(null);
+        //f.setVisible(true);
     }
 
     //helpers for UI
