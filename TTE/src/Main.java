@@ -48,13 +48,13 @@ public class Main {
 
                 // FIX FIX FIX
 
-//                // Adds a close button to tab(s)
-//                tabPane.setTabComponentAt(0, new CloseButton(tabPane, 0)); // Needed for adding to first tab
-//                tabPane.addChangeListener(e1 -> {
-//                    for(int i = 0; i < tabPane.getTabCount(); i++) {
-//                        tabPane.setTabComponentAt(i, new CloseButton(tabPane, i));
-//                    }
-//                }); // Adds to all tabs
+                // Adds a close button to tab(s)
+                tabPane.setTabComponentAt(0, new CloseButton(tabPane, 0)); // Needed for adding to first tab
+                tabPane.addChangeListener(e1 -> {
+                    for(int i = 0; i < tabPane.getTabCount(); i++) {
+                        tabPane.setTabComponentAt(i, new CloseButton(tabPane, i));
+                    }
+                }); // Adds to all tabs
             }
         });
 
