@@ -28,7 +28,7 @@ public class Main {
         
         // Initialize TabbedPane
         JTabbedPane tabPane = new JTabbedPane();
-
+        tabPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         // Initialize MenuBar
         JMenuBar menuBar = new JMenuBar();
         JMenuItem newSheet = new JMenuItem("New Sheet");
@@ -44,9 +44,7 @@ public class Main {
                 tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
 
                 // fun()
-                openSheetCreator(tabPane.getSelectedIndex(), tabPane);
-
-                // FIX FIX FIX
+                openSheetCreator(tabPane.getSelectedIndex(), tabPane, newFrame);
 
                 // Adds a close button to tab(s)
                 tabPane.setTabComponentAt(0, new CloseButton(tabPane, 0)); // Needed for adding to first tab
@@ -89,58 +87,22 @@ public class Main {
         menuBar.add(loadSheet);
         menuBar.add(saveSheet);
 
+        // Scroll hopefully...
+        JScrollPane scroll = new JScrollPane();
+        scroll.setBorder(null);
+        scroll.getViewport().setBackground(BG);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+        newFrame.add(scroll);
+
+        // Add colors to the UI
+        // Okay I tried but its not working atm
+
         // Add to frame
         newFrame.setJMenuBar(menuBar);
         newFrame.add(tabPane);
         newFrame.setVisible(true);
 
-        //###LEGACY MENU START //
-
-        JFrame frame = new JFrame("Table-Top-Engine | Legacy Debug Menu" );
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(640, 480);
-        frame.setLayout(new FlowLayout());
-
-        JButton createSheetButton = new JButton("Create New Sheet");
-        JButton loadSheetButton = new JButton("Load Sheet");
-        JButton showSheetButton = new JButton("Show Sheet");
-        JButton wumboButton = new JButton("Fun!");
-        JButton exitButton = new JButton("Exit");
-        JButton creditsButton = new JButton("Credits");
-
-        //I hate atomics
-        java.util.concurrent.atomic.AtomicReference<Sheet> loadedSheet =
-            new java.util.concurrent.atomic.AtomicReference<>(null);
-
-        //createSheetButton.addActionListener(e -> openSheetCreator());
-        wumboButton.addActionListener(e ->
-            JOptionPane.showMessageDialog(frame, "You've been surprised by the Fun! dialog box!!!"));
-        exitButton.addActionListener(e -> System.exit(0));
-        creditsButton.addActionListener(e -> openCreditWindow());
-
-        loadSheetButton.addActionListener(e -> {
-            Sheet result = openLoadWindow(frame);
-            if (result != null) {
-                loadedSheet.set(result);
-                System.out.println("Sheet loaded: " + result);
-            }
-        });
-
-        showSheetButton.addActionListener(e -> {
-            Sheet sheet = loadedSheet.get();
-            if (sheet == null)
-                JOptionPane.showMessageDialog(frame, "No sheet loaded. Please load or create a sheet first.");
-            else
-                openShowSheetWindow(sheet);
-        });
-
-        frame.add(createSheetButton);
-        frame.add(loadSheetButton);
-        frame.add(showSheetButton);
-        frame.add(wumboButton);
-        frame.add(exitButton);
-        frame.add(creditsButton);
-        frame.setVisible(true);
     }
 
     // Close button class for tabs
@@ -294,13 +256,7 @@ public class Main {
     }
 
     //sheet creation
-    public static void openSheetCreator(int index, JTabbedPane pane) {
-
-        //main frame
-        //JFrame f = new JFrame("Create Character Sheet");
-        //f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        //f.setSize(780, 860);
-        //f.setBackground(BG);
+    public static void openSheetCreator(int index, JTabbedPane pane, JFrame frame) {
 
         Sheet sheet = new Sheet();
         JPanel root = new JPanel();
@@ -502,17 +458,7 @@ public class Main {
         root.add(saveBtn);
         root.add(vgap(10));
 
-        JScrollPane scroll = new JScrollPane(root);
-        scroll.setBorder(null);
-        scroll.getViewport().setBackground(BG);
-        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scroll.getVerticalScrollBar().setUnitIncrement(16);
-
         pane.setComponentAt(index, root);
-
-        //f.add(scroll);
-        //f.setLocationRelativeTo(null);
-        //f.setVisible(true);
     }
 
     //helpers for UI
@@ -677,5 +623,5 @@ public class Main {
 }
 
 // Maeve was here
-//Ben was too
+// Ben was too
 // Skyler waz here :3
