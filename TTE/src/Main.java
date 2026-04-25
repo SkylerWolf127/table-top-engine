@@ -25,7 +25,7 @@ public class Main {
         JFrame newFrame = new JFrame("TTE Character Sheet Builder");
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.setSize(800,600);
-        
+
         // Initialize TabbedPane
         JTabbedPane tabPane = new JTabbedPane();
         tabPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -209,18 +209,18 @@ public class Main {
 
         sb.append("\n=== SKILL PROFICIENCIES ===\n");
         String[] skillNames = {
-            "Acrobatics","Animal Handling","Arcana","Athletics","Deception",
-            "History","Insight","Intimidation","Investigation","Medicine",
-            "Nature","Perception","Performance","Persuasion","Religion",
-            "Sleight of Hand","Stealth","Survival"
+                "Acrobatics","Animal Handling","Arcana","Athletics","Deception",
+                "History","Insight","Intimidation","Investigation","Medicine",
+                "Nature","Perception","Performance","Persuasion","Religion",
+                "Sleight of Hand","Stealth","Survival"
         };
         boolean[] profs = {
-            sheet.isAcrobatics(),sheet.isAnimalHandling(),sheet.isArcana(),
-            sheet.isAthletics(),sheet.isDeception(),sheet.isHistory(),
-            sheet.isInsight(),sheet.isIntimidation(),sheet.isInvestigation(),
-            sheet.isMedicine(),sheet.isNature(),sheet.isPerception(),
-            sheet.isPerformance(),sheet.isPersuasion(),sheet.isReligion(),
-            sheet.isSleightOfHand(),sheet.isStealth(),sheet.isSurvival()
+                sheet.isAcrobatics(),sheet.isAnimalHandling(),sheet.isArcana(),
+                sheet.isAthletics(),sheet.isDeception(),sheet.isHistory(),
+                sheet.isInsight(),sheet.isIntimidation(),sheet.isInvestigation(),
+                sheet.isMedicine(),sheet.isNature(),sheet.isPerception(),
+                sheet.isPerformance(),sheet.isPersuasion(),sheet.isReligion(),
+                sheet.isSleightOfHand(),sheet.isStealth(),sheet.isSurvival()
         };
         boolean any = false;
         for (int i = 0; i < skillNames.length; i++)
@@ -244,11 +244,11 @@ public class Main {
         w.setSize(700, 480);
         w.setLayout(new FlowLayout());
         JTextArea t = new JTextArea(
-            "Table Top Engine\nBrought to you by: The C-TEAM\n" +
-            "Program manager - Maeve\nLead architect - Skyler\n" +
-            "Documentation and provider of cat pictures - Tara\n\n" +
-            "Built on OpenJDK + IntelliJ Community Edition. GPL V2.0\n" +
-            "Copyright 2026 The C-TEAM\n\nThank you for using our program!");
+                "Table Top Engine\nBrought to you by: The C-TEAM\n" +
+                        "Program manager - Maeve\nLead architect - Skyler\n" +
+                        "Documentation and provider of cat pictures - Tara\n\n" +
+                        "Built on OpenJDK + IntelliJ Community Edition. GPL V2.0\n" +
+                        "Copyright 2026 The C-TEAM\n\nThank you for using our program!");
         JButton ok = new JButton("OK");
         ok.addActionListener(e -> w.dispose());
         w.add(t); w.add(ok);
@@ -317,9 +317,9 @@ public class Main {
 
         JPanel abilitySection = makeSection("ABILITY SCORES");
         abilitySection.add(abilityRow(
-            new String[]{"STR","DEX","CON","INT","WIS","CHA"},
-            new JTextField[]{strField,dexField,conField,intField,wisField,chaField},
-            new JLabel[]{strMod,dexMod,conMod,intMod,wisMod,chaMod}
+                new String[]{"STR","DEX","CON","INT","WIS","CHA"},
+                new JTextField[]{strField,dexField,conField,intField,wisField,chaField},
+                new JLabel[]{strMod,dexMod,conMod,intMod,wisMod,chaMod}
         ));
         root.add(abilitySection);
         root.add(vgap(14));
@@ -365,10 +365,10 @@ public class Main {
 
         //Primary skills
         String[] skillNames = {
-            "Acrobatics","Animal Handling","Arcana","Athletics","Deception",
-            "History","Insight","Intimidation","Investigation","Medicine",
-            "Nature","Perception","Performance","Persuasion","Religion",
-            "Sleight of Hand","Stealth","Survival"
+                "Acrobatics","Animal Handling","Arcana","Athletics","Deception",
+                "History","Insight","Intimidation","Investigation","Medicine",
+                "Nature","Perception","Performance","Persuasion","Religion",
+                "Sleight of Hand","Stealth","Survival"
         };
         JCheckBox[] skillBoxes = new JCheckBox[skillNames.length];
         for (int i = 0; i < skillNames.length; i++)
@@ -458,7 +458,14 @@ public class Main {
         root.add(saveBtn);
         root.add(vgap(10));
 
-        pane.setComponentAt(index, root);
+        //SCROLL COMPONENTS AAAA THE VOICES THEY ARE LOUD
+        JScrollPane sheetScroll = new JScrollPane(root); //wrap it in root for scrolling
+        sheetScroll.setBorder(null);
+        sheetScroll.getViewport().setBackground(BG);
+        sheetScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        sheetScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sheetScroll.getVerticalScrollBar().setUnitIncrement(16);
+        pane.setComponentAt(index, sheetScroll);
     }
 
     //helpers for UI
@@ -467,8 +474,8 @@ public class Main {
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(PANEL_BG);
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(BORDER_COL, 1),
-            BorderFactory.createEmptyBorder(14, 16, 14, 16)
+                BorderFactory.createLineBorder(BORDER_COL, 1),
+                BorderFactory.createEmptyBorder(14, 16, 14, 16)
         ));
         card.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
@@ -524,8 +531,8 @@ public class Main {
             cell.setLayout(new BoxLayout(cell, BoxLayout.Y_AXIS));
             cell.setBackground(SECTION_BG);
             cell.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(BORDER_COL, 1),
-                BorderFactory.createEmptyBorder(8, 8, 8, 8)
+                    BorderFactory.createLineBorder(BORDER_COL, 1),
+                    BorderFactory.createEmptyBorder(8, 8, 8, 8)
             ));
 
             JLabel abbr = new JLabel(labels[i], SwingConstants.CENTER);
@@ -585,8 +592,8 @@ public class Main {
         f.setCaretColor(ACCENT);
         f.setFont(new Font("Georgia", Font.PLAIN, 13));
         f.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(BORDER_COL, 1),
-            BorderFactory.createEmptyBorder(4, 8, 4, 8)
+                BorderFactory.createLineBorder(BORDER_COL, 1),
+                BorderFactory.createEmptyBorder(4, 8, 4, 8)
         ));
     }
 
