@@ -86,13 +86,9 @@ public class Main {
                 });
             }
         });
-
-
-
         // Add items to menu
         menuBar.add(newSheet);
         menuBar.add(loadSheet);
-
 
         // Opens the credits window
         credits.addActionListener(e -> openCreditWindow());
@@ -110,9 +106,7 @@ public class Main {
         newFrame.setJMenuBar(menuBar);
         newFrame.add(tabPane);
         newFrame.setVisible(true);
-
     }
-
     // Close button class for tabs
     static class CloseButton extends JPanel {
         public CloseButton(final JTabbedPane tabPane, int index) {
@@ -142,22 +136,6 @@ public class Main {
             JOptionPane.showMessageDialog(parent, "Failed to load sheet.");
         }
         return returnSheet;
-
-          /* ### THIS IS OLD LEGACY LOADING CODE. ONLY USE FOR DEBUG PURPOSES. AS OF NOW, IT IS DEPRECATED.
-        String name = JOptionPane.showInputDialog(parent,
-            "Enter character file name (include .dat):");
-        if (name == null || name.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(parent, "Load cancelled.");
-            return null;
-        }
-        Sheet loaded = PlayerSheetIO.loadPlayerSheetFromFile(name);
-        if (loaded == null) {
-            JOptionPane.showMessageDialog(parent, "Failed to load: " + name);
-            return null;
-        }
-        JOptionPane.showMessageDialog(parent, "Loaded: " + loaded.getCharacterName());
-        return loaded;
-         */
     }
 
     //this doesn't open a window anymore, but instead it fires off the data into a .txt file.
@@ -731,7 +709,7 @@ public class Main {
         root.add(skillSection);
         root.add(vgap(20));
 
-        //Save dat shit
+        //Save dat stuff
         JButton saveBtn = new JButton("SAVE CHARACTER SHEET");
         saveBtn.setFont(new Font("Georgia", Font.BOLD, 14));
         saveBtn.setBackground(ACCENT);
