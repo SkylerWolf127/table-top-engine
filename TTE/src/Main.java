@@ -25,7 +25,7 @@ public class Main {
         // Initialize JFrame
         JFrame newFrame = new JFrame("Table Top Engine | Sheet Builder");
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newFrame.setSize(800,600);
+        newFrame.setSize(800,1000);
 
         // Initialize TabbedPane
         JTabbedPane tabPane = new JTabbedPane();
@@ -34,7 +34,8 @@ public class Main {
         JMenuBar menuBar = new JMenuBar();
         JMenuItem newSheet = new JMenuItem("New Sheet");
         JMenuItem loadSheet = new JMenuItem("Load Sheet");
-        JMenuItem saveSheet = new JMenuItem("Save Sheet");
+        //JMenuItem saveSheet = new JMenuItem("Save Sheet"); ### OLD SAVE BUTTON ###
+        JMenuItem credits = new JMenuItem("Credits");
 
         // Add a new sheet to the tabs
         newSheet.addActionListener(new ActionListener() {
@@ -86,18 +87,16 @@ public class Main {
             }
         });
 
-        // Saves the current sheet | ###TO BE REMOVED###
-        saveSheet.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("At some point this button will save the current sheet");
-            }
-        });
+
 
         // Add items to menu
         menuBar.add(newSheet);
         menuBar.add(loadSheet);
-        menuBar.add(saveSheet);
+
+
+        // Opens the credits window
+        credits.addActionListener(e -> openCreditWindow());
+        menuBar.add(credits);
 
         // Scroll hopefully...
         JScrollPane scroll = new JScrollPane();
@@ -266,7 +265,7 @@ public class Main {
         root.setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
 
         //Tab title banner
-        JPanel titleBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel titleBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         titleBar.setBackground(BG);
         titleBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         JLabel titleLabel = new JLabel(sheet.getCharacterName());
@@ -275,8 +274,29 @@ public class Main {
         JLabel subtitleLabel = new JLabel("  ·  Loaded Character Sheet  ·  Read Only");
         subtitleLabel.setFont(new Font("Georgia", Font.ITALIC, 14));
         subtitleLabel.setForeground(TEXT_DIM);
+
+        // Edit Sheet toggle button
+        JButton editBtn = new JButton("Edit Sheet");
+        editBtn.setFont(new Font("Georgia", Font.BOLD, 12));
+        editBtn.setBackground(SECTION_BG);
+        editBtn.setForeground(TEXT);
+        editBtn.setFocusPainted(false);
+        editBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        //New save button. Different location compared to sheet creator. Overwrites the original .dat file.
+        JButton saveEditBtn = new JButton("Save Sheet");
+        saveEditBtn.setFont(new Font("Georgia", Font.BOLD, 12));
+        saveEditBtn.setBackground(ACCENT);
+        saveEditBtn.setForeground(Color.WHITE);
+        saveEditBtn.setFocusPainted(false);
+        saveEditBtn.setBorderPainted(false);
+        saveEditBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        saveEditBtn.setVisible(false); //Save button won't become visible until edit mode is triggered.
+
         titleBar.add(titleLabel);
         titleBar.add(subtitleLabel);
+        titleBar.add(editBtn);
+        titleBar.add(saveEditBtn);
         root.add(titleBar);
         root.add(vgap(14));
 
@@ -394,7 +414,175 @@ public class Main {
         root.add(skillSection);
         root.add(vgap(20));
 
-        //Export button call openSheetWindow and feet it the data
+        //### EDITING ROUTINE STARTS HERE ###
+        JTextField[] allFields = {
+                nameField, classField, raceField, bgField, alignmentField, playerField,
+                expField, levelField,
+                strField, dexField, conField, intField, wisField, chaField,
+                acField, initField, speedField, hpMaxField, curHpField, tempHpField,
+                hdTypeField, hdTotalField, profBonField, inspirField,
+                strSave, dexSave, conSave, intSave, wisSave, chaSave
+        };
+
+        //Edit Sheet Set all data fields from read only to editable
+        editBtn.addActionListener(e -> {
+            boolean[] editing = {editBtn.getText().equals("Edit Sheet")};
+            if (editing[0]) {
+                //Enter edit mode
+                for (JTextField f : allFields) {
+                    f.setEditable(true);
+                    f.setForeground(TEXT);
+                }
+                for (JCheckBox cb : skillBoxes) cb.setEnabled(true);
+
+                //reset listeners to modifier fields
+                attachScoreListener(strField, strMod, v -> { sheet.setStrength(v); return sheet.getStrenghMod(); });
+                attachScoreListener(dexField, dexMod, v -> { sheet.setDexterity(v); return sheet.getDexterityMod(); });
+                attachScoreListener(conField, conMod, v -> { sheet.setConstitution(v); return sheet.getConstitutionMod(); });
+                attachScoreListener(intField, intMod, v -> { sheet.setIntelligence(v); return sheet.getIntelligenceMod(); });
+                attachScoreListener(wisField, wisMod, v -> { sheet.setWisdom(v); return sheet.getWisdomMod(); });
+                attachScoreListener(chaField, chaMod, v -> { sheet.setCharisma(v); return sheet.getCharismaMod(); });
+
+                subtitleLabel.setText("  ·  Loaded Character Sheet  ·  Editing");
+                subtitleLabel.setForeground(ACCENT);
+                editBtn.setText("Discard Changes");
+                saveEditBtn.setVisible(true);
+            } else {
+                //Discard editing changes. Reference original sheet object and re-populate data fields
+                nameField.setText(sheet.getCharacterName());
+                classField.setText(sheet.getCharacterClass());
+                raceField.setText(sheet.getCharacterRace());
+                bgField.setText(sheet.getCharacterBackground());
+                alignmentField.setText(sheet.getCharacterAlignment());
+                playerField.setText(sheet.getPlayerName());
+                expField.setText(String.valueOf(sheet.getCharacterEXP()));
+                levelField.setText(String.valueOf(sheet.getCharacterLevel()));
+                strField.setText(String.valueOf(sheet.getStrength()));
+                dexField.setText(String.valueOf(sheet.getDexterity()));
+                conField.setText(String.valueOf(sheet.getConstitution()));
+                intField.setText(String.valueOf(sheet.getIntelligence()));
+                wisField.setText(String.valueOf(sheet.getWisdom()));
+                chaField.setText(String.valueOf(sheet.getCharisma()));
+                acField.setText(String.valueOf(sheet.getArmorClass()));
+                initField.setText(String.valueOf(sheet.getInitiative()));
+                speedField.setText(String.valueOf(sheet.getSpeed()));
+                hpMaxField.setText(String.valueOf(sheet.getHpMax()));
+                curHpField.setText(String.valueOf(sheet.getCurrentHP()));
+                tempHpField.setText(String.valueOf(sheet.getTempHP()));
+                hdTypeField.setText(sheet.getHitDiceType());
+                hdTotalField.setText(String.valueOf(sheet.getHitDiceTotal()));
+                profBonField.setText(String.valueOf(sheet.getProfBonus()));
+                inspirField.setText(String.valueOf(sheet.getInspiration()));
+                strSave.setText(String.valueOf(sheet.getStrengthSave()));
+                dexSave.setText(String.valueOf(sheet.getDexteritySave()));
+                conSave.setText(String.valueOf(sheet.getConstitutionSave()));
+                intSave.setText(String.valueOf(sheet.getIntelligenceSave()));
+                wisSave.setText(String.valueOf(sheet.getWisdomSave()));
+                chaSave.setText(String.valueOf(sheet.getCharismaSave()));
+                boolean[] savedProfs = {
+                        sheet.isAcrobatics(), sheet.isAnimalHandling(), sheet.isArcana(),
+                        sheet.isAthletics(), sheet.isDeception(), sheet.isHistory(),
+                        sheet.isInsight(), sheet.isIntimidation(), sheet.isInvestigation(),
+                        sheet.isMedicine(), sheet.isNature(), sheet.isPerception(),
+                        sheet.isPerformance(), sheet.isPersuasion(), sheet.isReligion(),
+                        sheet.isSleightOfHand(), sheet.isStealth(), sheet.isSurvival()
+                };
+                for (int i = 0; i < skillBoxes.length; i++) {
+                    skillBoxes[i].setSelected(savedProfs[i]);
+                    skillBoxes[i].setEnabled(false);
+                }
+                for (JTextField f : allFields) {
+                    f.setEditable(false);
+                    f.setForeground(TEXT_DIM);
+                }
+                subtitleLabel.setText("  ·  Loaded Character Sheet  ·  Read Only");
+                subtitleLabel.setForeground(TEXT_DIM);
+                editBtn.setText("Edit Sheet");
+                saveEditBtn.setVisible(false);
+            }
+        });
+
+        // Save Sheet — writes all edited field values back to the sheet object and overwrites the .dat file
+        saveEditBtn.addActionListener(e -> {
+            try {
+                sheet.setCharacterName(nameField.getText().trim());
+                sheet.setCharacterClass(classField.getText().trim());
+                sheet.setCharacterRace(raceField.getText().trim());
+                sheet.setCharacterBackground(bgField.getText().trim());
+                sheet.setCharacterAlignment(alignmentField.getText().trim());
+                sheet.setPlayerName(playerField.getText().trim());
+                sheet.setCharacterEXP(parseIntOrZero(expField.getText()));
+                sheet.setCharacterLevel(parseIntOrZero(levelField.getText()));
+                sheet.setStrength(parseIntOrZero(strField.getText()));
+                sheet.setDexterity(parseIntOrZero(dexField.getText()));
+                sheet.setConstitution(parseIntOrZero(conField.getText()));
+                sheet.setIntelligence(parseIntOrZero(intField.getText()));
+                sheet.setWisdom(parseIntOrZero(wisField.getText()));
+                sheet.setCharisma(parseIntOrZero(chaField.getText()));
+                sheet.setArmorClass(parseIntOrZero(acField.getText()));
+                sheet.setInitiative(parseIntOrZero(initField.getText()));
+                sheet.setSpeed(parseIntOrZero(speedField.getText()));
+                sheet.setHpMax(parseIntOrZero(hpMaxField.getText()));
+                sheet.setCurrentHP(parseIntOrZero(curHpField.getText()));
+                sheet.setTempHP(parseIntOrZero(tempHpField.getText()));
+                sheet.setHitDiceType(hdTypeField.getText().trim());
+                sheet.setHitDiceTotal(parseIntOrZero(hdTotalField.getText()));
+                sheet.setProfBonus(parseIntOrZero(profBonField.getText()));
+                sheet.setInspiration(parseIntOrZero(inspirField.getText()));
+                sheet.setStrengthSave(parseIntOrZero(strSave.getText()));
+                sheet.setDexteritySave(parseIntOrZero(dexSave.getText()));
+                sheet.setConstitutionSave(parseIntOrZero(conSave.getText()));
+                sheet.setIntelligenceSave(parseIntOrZero(intSave.getText()));
+                sheet.setWisdomSave(parseIntOrZero(wisSave.getText()));
+                sheet.setCharismaSave(parseIntOrZero(chaSave.getText()));
+                sheet.setAcrobatics(skillBoxes[0].isSelected());
+                sheet.setAnimalHandling(skillBoxes[1].isSelected());
+                sheet.setArcana(skillBoxes[2].isSelected());
+                sheet.setAthletics(skillBoxes[3].isSelected());
+                sheet.setDeception(skillBoxes[4].isSelected());
+                sheet.setHistory(skillBoxes[5].isSelected());
+                sheet.setInsight(skillBoxes[6].isSelected());
+                sheet.setIntimidation(skillBoxes[7].isSelected());
+                sheet.setInvestigation(skillBoxes[8].isSelected());
+                sheet.setMedicine(skillBoxes[9].isSelected());
+                sheet.setNature(skillBoxes[10].isSelected());
+                sheet.setPerception(skillBoxes[11].isSelected());
+                sheet.setPerformance(skillBoxes[12].isSelected());
+                sheet.setPersuasion(skillBoxes[13].isSelected());
+                sheet.setReligion(skillBoxes[14].isSelected());
+                sheet.setSleightOfHand(skillBoxes[15].isSelected());
+                sheet.setStealth(skillBoxes[16].isSelected());
+                sheet.setSurvival(skillBoxes[17].isSelected());
+
+                if (sheet.getCharacterName().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Character name cannot be empty.");
+                    return;
+                }
+
+                // Overwrite the original file
+                String saveName = sheet.getCharacterName() + ".dat";
+                PlayerSheetIO.savePlayerSheetToFile(sheet, saveName);
+
+                // Lock everything back to read-only after a successful save
+                for (JTextField f : allFields) {
+                    f.setEditable(false);
+                    f.setForeground(TEXT_DIM);
+                }
+                for (JCheckBox cb : skillBoxes) cb.setEnabled(false);
+                titleLabel.setText(sheet.getCharacterName());
+                subtitleLabel.setText("  ·  Loaded Character Sheet  ·  Read Only");
+                subtitleLabel.setForeground(TEXT_DIM);
+                editBtn.setText("Edit Sheet");
+                saveEditBtn.setVisible(false);
+
+                JOptionPane.showMessageDialog(null, "Sheet saved as \"" + saveName + "\"");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error saving sheet: " + ex.getMessage());
+            }
+        });
+//### EDITING ROUTINE ENDS HERE ###
+
+        //Export button | calls openShowSheetWindow to write a .txt audit file
         JButton exportBtn = new JButton("EXPORT SHEET REPORT (.txt)");
         exportBtn.setFont(new Font("Georgia", Font.BOLD, 14));
         exportBtn.setBackground(ACCENT);
