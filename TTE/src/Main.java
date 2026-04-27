@@ -3,6 +3,7 @@ import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class Main {
     //color pallete
@@ -56,21 +57,32 @@ public class Main {
             }
         });
 
-        // Loads a new sheet to the tabs
+        // Loads a sheet from file and displays it in a new tab
         loadSheet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Creates a new tab in tabPane
-                tabPane.addTab("Loaded Sheet #" + (++tabNumber), new JLabel("Content of Loaded Sheet #" + (tabNumber)));
+                // Open the file browser and load the sheet
+                Sheet loaded = openLoadWindow(newFrame);
+
+                // Only open a tab if the load actually succeeded
+                if (loaded == null || loaded.getCharacterName() == null || loaded.getCharacterName().isEmpty()) {
+                    return;
+                }
+
+                String tabTitle = "Loaded: " + loaded.getCharacterName() + " #" + (++tabNumber);
+                tabPane.addTab(tabTitle, new JLabel("Loading..."));
                 tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
 
+                // Populate the tab with the read-only sheet viewer
+                openLoadedSheetViewer(tabPane.getSelectedIndex(), tabPane, loaded);
+
                 // Adds a close button to tab(s)
-                tabPane.setTabComponentAt(0, new CloseButton(tabPane, 0)); // Needed for adding to first tab
+                tabPane.setTabComponentAt(tabPane.getTabCount() - 1, new CloseButton(tabPane, tabPane.getTabCount() - 1));
                 tabPane.addChangeListener(e1 -> {
                     for(int i = 0; i < tabPane.getTabCount(); i++) {
                         tabPane.setTabComponentAt(i, new CloseButton(tabPane, i));
                     }
-                }); // Adds to all tabs
+                });
             }
         });
 
@@ -94,9 +106,6 @@ public class Main {
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
         newFrame.add(scroll);
-
-        // Add colors to the UI
-        // Okay I tried but its not working atm
 
         // Add to frame
         newFrame.setJMenuBar(menuBar);
@@ -124,15 +133,13 @@ public class Main {
         }
     }
 
-    //load window
+    //load window — opens file browser, loads sheet, shows result dialog
     public static Sheet openLoadWindow(JFrame parent) {
-        Sheet returnSheet = new Sheet();
+        Sheet returnSheet = PlayerSheetIO.loadSheetFromDirectory();
 
-        returnSheet = PlayerSheetIO.loadSheetFromDirectory();
-
-        if (returnSheet != null && returnSheet.getCharacterName() != "") {
-            JOptionPane.showMessageDialog(parent, "Loaded sheet " + returnSheet.getCharacterName());
-        }else {
+        if (returnSheet != null && returnSheet.getCharacterName() != null && !returnSheet.getCharacterName().isEmpty()) {
+            JOptionPane.showMessageDialog(parent, "Loaded sheet: " + returnSheet.getCharacterName());
+        } else {
             JOptionPane.showMessageDialog(parent, "Failed to load sheet.");
         }
         return returnSheet;
@@ -151,22 +158,12 @@ public class Main {
         }
         JOptionPane.showMessageDialog(parent, "Loaded: " + loaded.getCharacterName());
         return loaded;
-
          */
-
     }
 
-    //generate report for show sheet window
+    //this doesn't open a window anymore, but instead it fires off the data into a .txt file.
+    //Accessible from the loadedSheet UI tab.
     public static void openShowSheetWindow(Sheet sheet) {
-        JFrame f = new JFrame("Character Sheet — " + sheet.getCharacterName());
-        f.setSize(700, 900);
-        f.setLayout(new BorderLayout());
-
-        JTextArea ta = new JTextArea();
-        ta.setEditable(false);
-        ta.setFont(new Font("Monospaced", Font.PLAIN, 13));
-        ta.setMargin(new Insets(10, 10, 10, 10));
-
         StringBuilder sb = new StringBuilder();
         sb.append("=== CHARACTER INFO ===\n");
         sb.append(String.format("%-20s %s%n", "Name:", sheet.getCharacterName()));
@@ -200,7 +197,7 @@ public class Main {
         sb.append(String.format("%-20s %d%n", "Speed:", sheet.getSpeed()));
         sb.append(String.format("%-20s %d / %d%n",  "HP (Cur/Max):", sheet.getCurrentHP(), sheet.getHpMax()));
         sb.append(String.format("%-20s %d%n", "Temp HP:", sheet.getTempHP()));
-        sb.append(String.format("%-20s %s (%d)%n",  "Hit Dice:",sheet.getHitDiceType(), sheet.getHitDiceTotal()));
+        sb.append(String.format("%-20s %s (%d)%n",  "Hit Dice:", sheet.getHitDiceType(), sheet.getHitDiceTotal()));
         sb.append(String.format("%-20s %d success / %d fail%n", "Death Saves:", sheet.getLifeSaves(), sheet.getDeathSaves()));
 
         sb.append("\n=== MISC ===\n");
@@ -228,14 +225,18 @@ public class Main {
         if (!any) sb.append("  None\n");
         sb.append("<!>END OF CHARACTER AUDIT NO FURTHER INFORMATION OR SECRETS WERE FOUND<!>");
 
-        ta.setText(sb.toString());
-        ta.setCaretPosition(0);
-
-        JButton close = new JButton("Close");
-        close.addActionListener(e -> f.dispose());
-        f.add(new JScrollPane(ta), BorderLayout.CENTER);
-        f.add(close, BorderLayout.SOUTH);
-        f.setVisible(true);
+        // Write the report to a text file
+        String safeName = sheet.getCharacterName().replaceAll("[^a-zA-Z0-9_\\-]", "_"); //replace weird spaces with underscore cause filesystem BS. (EXT4 causing problems???)
+        String filename = safeName + "_sheet.txt";
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+            pw.print(sb.toString());
+            JOptionPane.showMessageDialog(null,
+                    "Sheet report saved to: " + new File(filename).getAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Error writing sheet report: " + e.getMessage());
+            JOptionPane.showMessageDialog(null,
+                    "Failed to save sheet report: " + e.getMessage());
+        }
     }
 
     //Credits
@@ -253,6 +254,169 @@ public class Main {
         ok.addActionListener(e -> w.dispose());
         w.add(t); w.add(ok);
         w.setVisible(true);
+    }
+
+    /*
+    hooks PlayerSheetIO load routine to load data into a viewable sheet that's not a really fancy long string.
+     */
+    public static void openLoadedSheetViewer(int index, JTabbedPane pane, Sheet sheet) {
+        JPanel root = new JPanel();
+        root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
+        root.setBackground(BG);
+        root.setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
+
+        //Tab title banner
+        JPanel titleBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        titleBar.setBackground(BG);
+        titleBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        JLabel titleLabel = new JLabel(sheet.getCharacterName());
+        titleLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
+        titleLabel.setForeground(ACCENT);
+        JLabel subtitleLabel = new JLabel("  ·  Loaded Character Sheet  ·  Read Only");
+        subtitleLabel.setFont(new Font("Georgia", Font.ITALIC, 14));
+        subtitleLabel.setForeground(TEXT_DIM);
+        titleBar.add(titleLabel);
+        titleBar.add(subtitleLabel);
+        root.add(titleBar);
+        root.add(vgap(14));
+
+        //Info
+        JTextField nameField = readOnlyField(sheet.getCharacterName());
+        JTextField classField = readOnlyField(sheet.getCharacterClass());
+        JTextField raceField = readOnlyField(sheet.getCharacterRace());
+        JTextField bgField = readOnlyField(sheet.getCharacterBackground());
+        JTextField alignmentField = readOnlyField(sheet.getCharacterAlignment());
+        JTextField playerField = readOnlyField(sheet.getPlayerName());
+        JTextField expField = readOnlyField(String.valueOf(sheet.getCharacterEXP()));
+        JTextField levelField = readOnlyField(String.valueOf(sheet.getCharacterLevel()));
+
+        JPanel infoSection = makeSection("CHARACTER INFO");
+        infoSection.add(twoColRow("Character Name", nameField, "Class", classField));
+        infoSection.add(vgap(8));
+        infoSection.add(twoColRow("Race", raceField, "Background", bgField));
+        infoSection.add(vgap(8));
+        infoSection.add(twoColRow("Alignment", alignmentField, "Player Name", playerField));
+        infoSection.add(vgap(8));
+        infoSection.add(twoColRow("Experience Points", expField, "Character Level", levelField));
+        root.add(infoSection);
+        root.add(vgap(14));
+
+        // Ability Scores
+        JTextField strField = readOnlyField(String.valueOf(sheet.getStrength()));
+        JTextField dexField = readOnlyField(String.valueOf(sheet.getDexterity()));
+        JTextField conField = readOnlyField(String.valueOf(sheet.getConstitution()));
+        JTextField intField = readOnlyField(String.valueOf(sheet.getIntelligence()));
+        JTextField wisField = readOnlyField(String.valueOf(sheet.getWisdom()));
+        JTextField chaField = readOnlyField(String.valueOf(sheet.getCharisma()));
+
+        JLabel strMod = modLabel(sheet.getStrenghMod());
+        JLabel dexMod = modLabel(sheet.getDexterityMod());
+        JLabel conMod = modLabel(sheet.getConstitutionMod());
+        JLabel intMod = modLabel(sheet.getIntelligenceMod());
+        JLabel wisMod = modLabel(sheet.getWisdomMod());
+        JLabel chaMod = modLabel(sheet.getCharismaMod());
+
+        JPanel abilitySection = makeSection("ABILITY SCORES");
+        abilitySection.add(abilityRow(
+                new String[]{"STR","DEX","CON","INT","WIS","CHA"},
+                new JTextField[]{strField,dexField,conField,intField,wisField,chaField},
+                new JLabel[]{strMod,dexMod,conMod,intMod,wisMod,chaMod}
+        ));
+        root.add(abilitySection);
+        root.add(vgap(14));
+
+        //Combat & Misc
+        JTextField acField = readOnlyField(String.valueOf(sheet.getArmorClass()));
+        JTextField initField = readOnlyField(String.valueOf(sheet.getInitiative()));
+        JTextField speedField = readOnlyField(String.valueOf(sheet.getSpeed()));
+        JTextField hpMaxField = readOnlyField(String.valueOf(sheet.getHpMax()));
+        JTextField curHpField = readOnlyField(String.valueOf(sheet.getCurrentHP()));
+        JTextField tempHpField = readOnlyField(String.valueOf(sheet.getTempHP()));
+        JTextField hdTypeField = readOnlyField(sheet.getHitDiceType());
+        JTextField hdTotalField = readOnlyField(String.valueOf(sheet.getHitDiceTotal()));
+        JTextField profBonField = readOnlyField(String.valueOf(sheet.getProfBonus()));
+        JTextField inspirField = readOnlyField(String.valueOf(sheet.getInspiration()));
+
+        JPanel combatSection = makeSection("COMBAT & MISC");
+        combatSection.add(twoColRow("Armor Class", acField, "Initiative", initField));
+        combatSection.add(vgap(8));
+        combatSection.add(twoColRow("Speed", speedField, "Proficiency Bonus", profBonField));
+        combatSection.add(vgap(8));
+        combatSection.add(twoColRow("HP Max", hpMaxField, "Current HP", curHpField));
+        combatSection.add(vgap(8));
+        combatSection.add(twoColRow("Temp HP", tempHpField, "Inspiration", inspirField));
+        combatSection.add(vgap(8));
+        combatSection.add(twoColRow("Hit Dice Type", hdTypeField, "Hit Dice Total", hdTotalField));
+        root.add(combatSection);
+        root.add(vgap(14));
+
+        //Saving Throws
+        JTextField strSave = readOnlyField(String.valueOf(sheet.getStrengthSave()));
+        JTextField dexSave = readOnlyField(String.valueOf(sheet.getDexteritySave()));
+        JTextField conSave = readOnlyField(String.valueOf(sheet.getConstitutionSave()));
+        JTextField intSave = readOnlyField(String.valueOf(sheet.getIntelligenceSave()));
+        JTextField wisSave = readOnlyField(String.valueOf(sheet.getWisdomSave()));
+        JTextField chaSave = readOnlyField(String.valueOf(sheet.getCharismaSave()));
+
+        JPanel saveSection = makeSection("SAVING THROWS");
+        saveSection.add(twoColRow("Strength", strSave, "Dexterity", dexSave));
+        saveSection.add(vgap(8));
+        saveSection.add(twoColRow("Constitution", conSave, "Intelligence", intSave));
+        saveSection.add(vgap(8));
+        saveSection.add(twoColRow("Wisdom", wisSave, "Charisma", chaSave));
+        root.add(saveSection);
+        root.add(vgap(14));
+
+        //Skill Proficiencies | I hate check boxes, but I think these aren't mutable
+        String[] skillNames = {
+                "Acrobatics","Animal Handling","Arcana","Athletics","Deception",
+                "History","Insight","Intimidation","Investigation","Medicine",
+                "Nature","Perception","Performance","Persuasion","Religion",
+                "Sleight of Hand","Stealth","Survival"
+        };
+        boolean[] profs = {
+                sheet.isAcrobatics(),sheet.isAnimalHandling(),sheet.isArcana(),
+                sheet.isAthletics(),sheet.isDeception(),sheet.isHistory(),
+                sheet.isInsight(),sheet.isIntimidation(),sheet.isInvestigation(),
+                sheet.isMedicine(),sheet.isNature(),sheet.isPerception(),
+                sheet.isPerformance(),sheet.isPersuasion(),sheet.isReligion(),
+                sheet.isSleightOfHand(),sheet.isStealth(),sheet.isSurvival()
+        };
+        JCheckBox[] skillBoxes = new JCheckBox[skillNames.length];
+        for (int i = 0; i < skillNames.length; i++) {
+            skillBoxes[i] = styledCheckBox(skillNames[i]);
+            skillBoxes[i].setSelected(profs[i]);
+            skillBoxes[i].setEnabled(false); // read-only
+        }
+
+        JPanel skillSection = makeSection("SKILL PROFICIENCIES");
+        skillSection.add(skillGrid(skillBoxes));
+        root.add(skillSection);
+        root.add(vgap(20));
+
+        //Export button call openSheetWindow and feet it the data
+        JButton exportBtn = new JButton("EXPORT SHEET REPORT (.txt)");
+        exportBtn.setFont(new Font("Georgia", Font.BOLD, 14));
+        exportBtn.setBackground(ACCENT);
+        exportBtn.setForeground(Color.WHITE);
+        exportBtn.setFocusPainted(false);
+        exportBtn.setBorderPainted(false);
+        exportBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exportBtn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 44));
+        exportBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exportBtn.addActionListener(e -> openShowSheetWindow(sheet));
+
+        root.add(exportBtn);
+        root.add(vgap(10));
+
+        // Wrap in scroll pane and place into the tab
+        JScrollPane sheetScroll = new JScrollPane(root);
+        sheetScroll.setBorder(null);
+        sheetScroll.getViewport().setBackground(BG);
+        sheetScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        sheetScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sheetScroll.getVerticalScrollBar().setUnitIncrement(16);
+        pane.setComponentAt(index, sheetScroll);
     }
 
     //sheet creation
@@ -436,12 +600,9 @@ public class Main {
                 sheet.setSurvival(skillBoxes[17].isSelected());
                 sheet.setSetup(true);
 
-                // SCREAMS OF AGONY
-
                 // FIX FIX FIX DO NOT LEAVE AS NULL
 
                 // SCREAMS OF AGONY
-
 
                 if (sheet.getCharacterName().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Character name cannot be empty.");
@@ -595,6 +756,21 @@ public class Main {
                 BorderFactory.createLineBorder(BORDER_COL, 1),
                 BorderFactory.createEmptyBorder(4, 8, 4, 8)
         ));
+    }
+
+    // Creates a styled, non-editable text field for displaying loaded sheet data
+    private static JTextField readOnlyField(String value) {
+        JTextField f = new JTextField(value);
+        f.setEditable(false);
+        f.setBackground(FIELD_BG);
+        f.setForeground(TEXT_DIM);   // slightly dimmed to signal read-only
+        f.setCaretColor(ACCENT);
+        f.setFont(new Font("Georgia", Font.PLAIN, 13));
+        f.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BORDER_COL, 1),
+                BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        return f;
     }
 
     private static JTextField styledField() {
