@@ -23,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         // Tabbed UI rework
         // Initialize JFrame
-        JFrame newFrame = new JFrame("TTE Character Sheet Builder");
+        JFrame newFrame = new JFrame("Table Top Engine | Sheet Builder");
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.setSize(800,600);
 
@@ -86,7 +86,7 @@ public class Main {
             }
         });
 
-        // Saves the current sheet
+        // Saves the current sheet | ###TO BE REMOVED###
         saveSheet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -248,7 +248,7 @@ public class Main {
                 "Table Top Engine\nBrought to you by: The C-TEAM\n" +
                         "Program manager - Maeve\nLead architect - Skyler\n" +
                         "Documentation and provider of cat pictures - Tara\n\n" +
-                        "Built on OpenJDK + IntelliJ Community Edition. GPL V2.0\n" +
+                        "Built on OpenJDK 21 & IntelliJ Community Edition. GPL V2.0\n" +
                         "Copyright 2026 The C-TEAM\n\nThank you for using our program!");
         JButton ok = new JButton("OK");
         ok.addActionListener(e -> w.dispose());
@@ -270,7 +270,7 @@ public class Main {
         titleBar.setBackground(BG);
         titleBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         JLabel titleLabel = new JLabel(sheet.getCharacterName());
-        titleLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
+        titleLabel.setFont(new Font("Georgia", Font.BOLD, 22));
         titleLabel.setForeground(ACCENT);
         JLabel subtitleLabel = new JLabel("  ·  Loaded Character Sheet  ·  Read Only");
         subtitleLabel.setFont(new Font("Georgia", Font.ITALIC, 14));
