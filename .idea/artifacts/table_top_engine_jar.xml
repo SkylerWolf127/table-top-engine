@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="table-top-engine:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/table_top_engine_jar</output-path>
+    <root id="archive" name="table-top-engine.jar">
+      <element id="module-output" name="table-top-engine" />
+    </root>
+  </artifact>
+</component>

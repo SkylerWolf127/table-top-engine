@@ -599,7 +599,7 @@ public class Main {
         titleBar.setBackground(BG);
         titleBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         JLabel titleLabel = new JLabel("New Character Sheet"); //change font here
-        titleLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
+        titleLabel.setFont(new Font("Georgia", Font.BOLD, 22));
         titleLabel.setForeground(ACCENT);
         JLabel subtitleLabel = new JLabel("  ·  Fill in your character details below");
         subtitleLabel.setFont(new Font("Georgia", Font.ITALIC, 14));
