@@ -8,7 +8,9 @@ public class Sheet implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //test flag
-    boolean isSetup; //flag for checking if the sheet is fully setup. Potentially use for unsaved progress?
+    boolean isSetup; //flag for checking if the sheet is fully setup.
+    // ## As of Beta 1.0 this flag is unused and is slated for removal. ##
+
     //top of sheet
     private String characterName;
     private String characterClass;
@@ -149,6 +151,7 @@ public class Sheet implements Serializable {
     public boolean isSetup() {
         return isSetup;
     }
+    // ## As of Beta 1.0 this flag is unused and is slated for removal. ##
 
     public void setSetup(boolean isSetup) {
         this.isSetup = isSetup;
@@ -165,8 +168,9 @@ public class Sheet implements Serializable {
     public String getCharacterClass() { return characterClass; }
     public void setCharacterClass(String characterClass) { this.characterClass = characterClass; }
 
-    public String getSubClass() { return subClass; }
-    public void setSubClass(String subClass) { this.subClass = subClass; }
+    //TODO: To be implemented after Beta 1.0 release
+    //public String getSubClass() { return subClass; }
+    //public void setSubClass(String subClass) { this.subClass = subClass; }
 
     public String getCharacterRace() { return characterRace; }
     public void setCharacterRace(String characterRace) { this.characterRace = characterRace; }
@@ -355,7 +359,7 @@ public class Sheet implements Serializable {
     public boolean isSurvival() { return survival; }
     public void setSurvival(boolean survival) { this.survival = survival; }
 
-    @Override
+    @Override //toString override used for debug purposes only. This should not be called under normal operations.
     public String toString() {
 
         return this.characterName + " " + this.characterClass + " " + this.characterRace + " " + this.characterBackground;

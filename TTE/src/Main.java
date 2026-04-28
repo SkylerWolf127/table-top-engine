@@ -69,7 +69,7 @@ public class Main {
                 if (loaded == null || loaded.getCharacterName() == null || loaded.getCharacterName().isEmpty()) {
                     return;
                 }
-
+                //loaded x sheet validation for user.
                 String tabTitle = "Loaded: " + loaded.getCharacterName() + " #" + (++tabNumber);
                 tabPane.addTab(tabTitle, new JLabel("Loading..."));
                 tabPane.setSelectedIndex(tabPane.getTabCount() - 1);
@@ -83,10 +83,11 @@ public class Main {
                     for(int i = 0; i < tabPane.getTabCount(); i++) {
                         tabPane.setTabComponentAt(i, new CloseButton(tabPane, i));
                     }
-                });
-            }
-        });
-        // Add items to menu
+                });//action listener end
+            }//method stub end
+        }); //action listener (outer) end
+
+        // Setup menu bar
         menuBar.add(newSheet);
         menuBar.add(loadSheet);
 
@@ -106,7 +107,9 @@ public class Main {
         newFrame.setJMenuBar(menuBar);
         newFrame.add(tabPane);
         newFrame.setVisible(true);
-    }
+    }//main end
+
+
     // Close button class for tabs
     static class CloseButton extends JPanel {
         public CloseButton(final JTabbedPane tabPane, int index) {
@@ -130,10 +133,11 @@ public class Main {
     public static Sheet openLoadWindow(JFrame parent) {
         Sheet returnSheet = PlayerSheetIO.loadSheetFromDirectory();
 
+        //error checking and validation. In case of null (Never know what's going to happen)
         if (returnSheet != null && returnSheet.getCharacterName() != null && !returnSheet.getCharacterName().isEmpty()) {
             JOptionPane.showMessageDialog(parent, "Loaded sheet: " + returnSheet.getCharacterName());
         } else {
-            JOptionPane.showMessageDialog(parent, "Failed to load sheet.");
+            JOptionPane.showMessageDialog(parent, "Failed to load sheet."); //oops
         }
         return returnSheet;
     }
@@ -142,6 +146,7 @@ public class Main {
     //Accessible from the loadedSheet UI tab.
     public static void openShowSheetWindow(Sheet sheet) {
         StringBuilder sb = new StringBuilder();
+        //make a REALLY REALLY LONG formatted string to send to an output file. String builder my beloved.
         sb.append("=== CHARACTER INFO ===\n");
         sb.append(String.format("%-20s %s%n", "Name:", sheet.getCharacterName()));
         sb.append(String.format("%-20s %s%n", "Class:", sheet.getCharacterClass()));
@@ -203,8 +208,12 @@ public class Main {
         sb.append("<!>END OF CHARACTER AUDIT NO FURTHER INFORMATION OR SECRETS WERE FOUND<!>");
 
         // Write the report to a text file
-        String safeName = sheet.getCharacterName().replaceAll("[^a-zA-Z0-9_\\-]", "_"); //replace weird spaces with underscore cause filesystem BS. (EXT4 causing problems???)
+        // Safe name is used to prevent weird issues caused by spaces being in files names.
+        String safeName = sheet.getCharacterName().replaceAll("[^a-zA-Z0-9_\\-]", "_");
         String filename = safeName + "_sheet.txt";
+
+        //setup print writer for writing to file.
+        //Use character name to name the file. (Plain text, .txt)
         try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
             pw.print(sb.toString());
             JOptionPane.showMessageDialog(null,
@@ -217,6 +226,7 @@ public class Main {
     }
 
     //Credits
+    //Basic window to show who worked on the program.
     public static void openCreditWindow() {
         JFrame w = new JFrame("Credits");
         w.setSize(700, 480);
@@ -225,9 +235,9 @@ public class Main {
                 "Table Top Engine\nBrought to you by: The C-TEAM\n" +
                         "Program manager - Maeve\nLead architect - Skyler\n" +
                         "Documentation and provider of cat pictures - Tara\n\n" +
-                        "Built on OpenJDK 21 & IntelliJ Community Edition. GPL V2.0\n" +
+                        "Built on OpenJDK 22 & IntelliJ Community Edition. GPL V2.0\n" +
                         "Copyright 2026 The C-TEAM\n\nThank you for using our program!");
-        JButton ok = new JButton("OK");
+        JButton ok = new JButton("Radical!");
         ok.addActionListener(e -> w.dispose());
         w.add(t); w.add(ok);
         w.setVisible(true);
@@ -261,7 +271,7 @@ public class Main {
         editBtn.setFocusPainted(false);
         editBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        //New save button. Different location compared to sheet creator. Overwrites the original .dat file.
+        //New save button | Replaces old save button from UI 1.0 Placed into the sheet viewer itself.
         JButton saveEditBtn = new JButton("Save Sheet");
         saveEditBtn.setFont(new Font("Georgia", Font.BOLD, 12));
         saveEditBtn.setBackground(ACCENT);
@@ -270,7 +280,7 @@ public class Main {
         saveEditBtn.setBorderPainted(false);
         saveEditBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         saveEditBtn.setVisible(false); //Save button won't become visible until edit mode is triggered.
-
+        //add to title bar
         titleBar.add(titleLabel);
         titleBar.add(subtitleLabel);
         titleBar.add(editBtn);
@@ -278,7 +288,7 @@ public class Main {
         root.add(titleBar);
         root.add(vgap(14));
 
-        //Info
+        //setup info fields
         JTextField nameField = readOnlyField(sheet.getCharacterName());
         JTextField classField = readOnlyField(sheet.getCharacterClass());
         JTextField raceField = readOnlyField(sheet.getCharacterRace());
@@ -287,7 +297,6 @@ public class Main {
         JTextField playerField = readOnlyField(sheet.getPlayerName());
         JTextField expField = readOnlyField(String.valueOf(sheet.getCharacterEXP()));
         JTextField levelField = readOnlyField(String.valueOf(sheet.getCharacterLevel()));
-
         JPanel infoSection = makeSection("CHARACTER INFO");
         infoSection.add(twoColRow("Character Name", nameField, "Class", classField));
         infoSection.add(vgap(8));
@@ -306,7 +315,6 @@ public class Main {
         JTextField intField = readOnlyField(String.valueOf(sheet.getIntelligence()));
         JTextField wisField = readOnlyField(String.valueOf(sheet.getWisdom()));
         JTextField chaField = readOnlyField(String.valueOf(sheet.getCharisma()));
-
         JLabel strMod = modLabel(sheet.getStrenghMod());
         JLabel dexMod = modLabel(sheet.getDexterityMod());
         JLabel conMod = modLabel(sheet.getConstitutionMod());
@@ -365,7 +373,7 @@ public class Main {
         root.add(saveSection);
         root.add(vgap(14));
 
-        //Skill Proficiencies | I hate check boxes, but I think these aren't mutable
+        //Skill Proficiencies | I hate check boxes, but I think these aren't mutable. Will be changed when editing mode is triggered
         String[] skillNames = {
                 "Acrobatics","Animal Handling","Arcana","Athletics","Deception",
                 "History","Insight","Intimidation","Investigation","Medicine",
@@ -384,9 +392,9 @@ public class Main {
         for (int i = 0; i < skillNames.length; i++) {
             skillBoxes[i] = styledCheckBox(skillNames[i]);
             skillBoxes[i].setSelected(profs[i]);
-            skillBoxes[i].setEnabled(false); // read-only
+            skillBoxes[i].setEnabled(false); // read only
         }
-
+        //setup skill proficiencies
         JPanel skillSection = makeSection("SKILL PROFICIENCIES");
         skillSection.add(skillGrid(skillBoxes));
         root.add(skillSection);
@@ -619,6 +627,7 @@ public class Main {
         JTextField expField = new JTextField("0");
         JTextField levelField = new JTextField("1");
 
+        //Format
         JPanel infoSection = makeSection("CHARACTER INFO");
         infoSection.add(twoColRow("Character Name", nameField, "Class", classField));
         infoSection.add(vgap(8));
@@ -766,14 +775,14 @@ public class Main {
                 sheet.setSurvival(skillBoxes[17].isSelected());
                 sheet.setSetup(true);
 
-                // FIX FIX FIX DO NOT LEAVE AS NULL
+                //TODO: After Beta 1.0, investigate null
 
-                // SCREAMS OF AGONY
-
+                //error check for empty sheet name. Sheet cannot be saved if name is empty.
                 if (sheet.getCharacterName().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Character name cannot be empty.");
                     return;
                 }
+                //sheet saved as getCharacterName().dat
                 String saveName = sheet.getCharacterName() + ".dat";
                 PlayerSheetIO.savePlayerSheetToFile(sheet, saveName);
                 JOptionPane.showMessageDialog(null, "Sheet saved as \"" + saveName + "\"");
@@ -785,7 +794,7 @@ public class Main {
         root.add(saveBtn);
         root.add(vgap(10));
 
-        //SCROLL COMPONENTS AAAA THE VOICES THEY ARE LOUD
+        //Scrolling components for this pane
         JScrollPane sheetScroll = new JScrollPane(root); //wrap it in root for scrolling
         sheetScroll.setBorder(null);
         sheetScroll.getViewport().setBackground(BG);
@@ -795,6 +804,8 @@ public class Main {
         pane.setComponentAt(index, sheetScroll);
     }
 
+    //### PANEL FORMATTING LAND ###
+    //these functions are used to help format the user interface.
     //helpers for UI
     private static JPanel makeSection(String title) {
         JPanel card = new JPanel();
