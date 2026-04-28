@@ -1,0 +1,47 @@
+=== CHARACTER INFO ===
+Name:                TestCharacter
+Class:               Diddy Kong
+Race:                Dragonborn
+Background:          Urchin
+Alignment:           Chaotic Evil
+Player:              Maeve
+EXP:                 420
+Level:               12
+
+=== ABILITY SCORES ===
+Strength:            13  (Mod: +1)
+Dexterity:           12  (Mod: +1)
+Constitution:         2  (Mod: -4)
+Intelligence:        13  (Mod: +1)
+Wisdom:              45  (Mod: +17)
+Charisma:            -100  (Mod: -55)
+
+=== SAVING THROWS ===
+Strength:            +12
+Dexterity:           +12
+Constitution:        +12
+Intelligence:        +12
+Wisdom:              +12
+Charisma:            +12
+
+=== COMBAT ===
+Armor Class:         15
+Initiative:          +1
+Speed:               30
+HP (Cur/Max):        20 / 25
+Temp HP:             13
+Hit Dice:            D12 (20)
+Death Saves:         0 success / 0 fail
+
+=== MISC ===
+Inspiration:         5
+Prof. Bonus:         1
+
+=== SKILL PROFICIENCIES ===
+  [X] Acrobatics
+  [X] Arcana
+  [X] Deception
+  [X] Intimidation
+  [X] Stealth
+  [X] Survival
+<!>END OF CHARACTER AUDIT NO FURTHER INFORMATION OR SECRETS WERE FOUND<!>
